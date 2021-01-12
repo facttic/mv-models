@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "description": "Models and DB access for Marchas Virtuales",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/facttic/mv-models.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Facttic",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^8.5.1",
