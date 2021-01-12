@@ -1,0 +1,19 @@
+{
+  "name": "mv-models",
+  "version": "1.0.0",
+  "description": "Models and DB access for Marchas Virtuales",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Facttic",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.11",
+    "mongoose-delete": "^0.5.3",
+    "validator": "^13.5.2"
+  }
+}
