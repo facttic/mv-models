@@ -59,21 +59,15 @@ PostSchema.statics.insertMany = async function insertMany(posts) {
 // }
 
 PostSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
-  const postsTotal = await this.model("Post").countDocuments({});
+  const postsTotal = await PostDAO.countDocuments({});
 
-  const postsCount = await this.model("Post")
-    .countDocuments({ ...query })
-    .skip(skip)
-    .limit(limit);
-
-  const posts = await this.model("Post")
-    .find({ ...query })
+  const posts = await PostDAO.find({ ...query })
     .skip(skip)
     .limit(limit)
     .sort(sort);
 
   return {
-    count: postsCount,
+    count: posts.length,
     list: posts,
     total: postsTotal,
   };
