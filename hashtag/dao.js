@@ -10,8 +10,8 @@ HashtagSchema.statics.createNew = async function createNew(hashtag) {
 };
 
 HashtagSchema.statics.getAll = async function getAll() {
-  const hashtagsCount = await this.model("Hashtag").countDocuments({ deleted: false });
-  const hashtags = await this.model("Hashtag").find({});
+  const hashtagsCount = await HashtagDAO.countDocuments({ deleted: false });
+  const hashtags = await HashtagDAO.find({});
 
   return {
     count: hashtagsCount,
