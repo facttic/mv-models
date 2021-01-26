@@ -8,9 +8,15 @@ afterAll(async () => await dbHandler.closeDatabase());
 
 describe("manifestation ", () => {
   it("can be created correctly", async () => {
-    expect(async () => await ManifestationDAO.createNew(validManifestation())).not.toThrow();
+    expect(
+      async () => await ManifestationDAO.createNew(factories.manifestationFactory()),
+    ).not.toThrow();
+  });
+
+  it("will throw if the body is invalid", async () => {
+    const invalidManifestation = factories.manifestationFactory({ name: { skip: true } });
+    await expect(ManifestationDAO.createNew(invalidManifestation)).rejects.toThrow(
+      "validation failed",
+    );
   });
 });
-
-const validManifestation = (options = {}, values = {}) =>
-  factories.manifestationFactory(options).generate(values);
