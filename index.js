@@ -5,6 +5,7 @@ const { HashtagDAO } = require("./hashtag/dao");
 const { PostDAO } = require("./post/dao");
 const { PostCrawlStatusDAO } = require("./post_crawl_status/dao");
 const { PostUserDAO } = require("./post_user/dao");
+const { ManifestationDAO } = require("./manifestation/dao");
 const UserDAO = require("./user/model");
 
 const init = async (dbUri) => {
@@ -26,5 +27,6 @@ module.exports = {
   PostCrawlStatusDAO,
   PostUserDAO,
   UserDAO,
+  ManifestationDAO,
   init,
 };
