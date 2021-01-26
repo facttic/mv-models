@@ -16,15 +16,15 @@ const ManifestationSchema = mongoose.Schema(
       },
       // que posiblemente tenga forma de uri
       font: { type: String, trim: true, required: true },
-      cards: { 
+      cards: {
         columns: { type: Number, required: true },
         width: { type: Number, required: true },
         height: { type: Number, required: true },
         colors: {
           hover: { type: String, trim: true, required: true },
-          border: { type: String, trim: true, required: true }, 
-        }
-      }
+          border: { type: String, trim: true, required: true },
+        },
+      },
     },
     images: {
       header: { type: String, trim: true, required: true },
@@ -34,7 +34,7 @@ const ManifestationSchema = mongoose.Schema(
         name: { type: String, trim: true, required: true },
         logoUri: { type: String, trim: true, required: true },
         pageUri: { type: String, trim: true, required: true },
-      }
+      },
     ],
     hashtags: [
       {
@@ -46,13 +46,13 @@ const ManifestationSchema = mongoose.Schema(
         name: { type: String, trim: true, required: true },
         // const source_enum = ["instagram", "twitter"]
         source: { type: String, trim: true, required: true },
-      }
+      },
     ],
     metadata: [
       {
         name: { type: String, trim: true, required: true },
         value: { type: String, trim: true, required: true },
-      }
+      },
     ],
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
