@@ -14,6 +14,7 @@ ManifestationSchema.statics.createNew = async function createNew(manifestation) 
 ManifestationSchema.statics.udpate = async function udpate(_id, manifestation) {
   return await ManifestationDAO.findByIdAndUpdate({ _id }, manifestation, {
     new: true,
+    runValidators: true,
   }).exec();
 };
 
