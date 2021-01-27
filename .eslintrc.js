@@ -1,11 +1,15 @@
 module.exports = {
   extends: ["standard", "plugin:prettier/recommended"],
-  plugins: ["jest"],
+  plugins: ["mocha", "chai"],
   rules: {
     "one-var": ["error", "never"],
     "prettier/prettier": "error",
   },
   env: {
-    "jest/globals": true,
+    node: true,
+    mocha: true,
+  },
+  globals: {
+    expect: true,
   },
 };
