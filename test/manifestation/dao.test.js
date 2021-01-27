@@ -1,22 +1,26 @@
-const dbHandler = require("../db_handler");
-const factories = require("../factories");
+const factory = require("../factories");
 const { ManifestationDAO } = require("../../manifestation/dao");
-
-beforeAll(async () => await dbHandler.connect());
-afterEach(async () => await dbHandler.clearDatabase());
-afterAll(async () => await dbHandler.closeDatabase());
 
 describe("manifestation ", () => {
   it("can be created correctly", async () => {
-    expect(
-      async () => await ManifestationDAO.createNew(factories.manifestationFactory()),
-    ).not.toThrow();
+    const manifestation = await factory.build("manifestation");
+    await expect(ManifestationDAO.createNew(manifestation)).to.be.fulfilled;
+    await expect(ManifestationDAO.getById(manifestation._id)).to.eventually.include({
+      name: manifestation.name,
+    });
   });
 
-  it("will throw if the body is invalid", async () => {
-    const invalidManifestation = factories.manifestationFactory({ name: { skip: true } });
-    await expect(ManifestationDAO.createNew(invalidManifestation)).rejects.toThrow(
-      "validation failed",
-    );
+  it("will throw if creation body is invalid", async () => {
+    const invalidManifestation = await factory.build("manifestation", { name: null });
+    await expect(ManifestationDAO.createNew(invalidManifestation)).to.be.rejected;
+    await expect(ManifestationDAO.getById(invalidManifestation._id)).to.eventually.equal(null);
+  });
+
+  it("will return every document", async () => {
+    const manifestations = await factory.createMany("manifestation", 10);
+    await expect(ManifestationDAO.getAll({}))
+      .to.eventually.be.an("object")
+      .that.has.property("list")
+      .which.has.lengthOf(manifestations.length);
   });
 });

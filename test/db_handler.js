@@ -8,6 +8,7 @@ const mongod = new MongoMemoryServer();
  */
 module.exports.connect = async () => {
   const uri = await mongod.getUri();
+  // const uri = "mongodb://localhost:27017/mv-test";
 
   await mongoose.connect(uri, {
     useNewUrlParser: true,
