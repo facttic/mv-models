@@ -34,6 +34,10 @@ const UserSchema = mongoose.Schema(
         },
       },
     ],
+    superadmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     toJSON: {
