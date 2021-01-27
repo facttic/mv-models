@@ -12,7 +12,9 @@ describe("manifestation ", () => {
 
   it("will throw if creation body is invalid", async () => {
     const invalidManifestation = await factory.build("manifestation", { name: null });
-    await expect(ManifestationDAO.createNew(invalidManifestation)).to.be.rejected;
+    await expect(ManifestationDAO.createNew(invalidManifestation)).to.be.rejectedWith(
+      "Manifestation validation failed",
+    );
     await expect(ManifestationDAO.getById(invalidManifestation._id)).to.eventually.equal(null);
   });
 
