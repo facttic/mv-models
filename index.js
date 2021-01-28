@@ -6,7 +6,7 @@ const { PostDAO } = require("./post/dao");
 const { PostCrawlStatusDAO } = require("./post_crawl_status/dao");
 const { PostUserDAO } = require("./post_user/dao");
 const { ManifestationDAO } = require("./manifestation/dao");
-const UserDAO = require("./user/model");
+const { UserDAO } = require("./user/dao");
 
 async function init(dbUri) {
   await mongoose.connect(dbUri, {
