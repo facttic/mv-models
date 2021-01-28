@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ManifestationDAO } = require("../manifestation/dao");
 
 const PostSchema = mongoose.Schema(
   {
@@ -34,6 +35,12 @@ const PostSchema = mongoose.Schema(
     source: { type: String, trim: true, required: true },
     geo: {},
     coordinates: {},
+    manifestation_id: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+      ref: ManifestationDAO,
+      index: true,
+    },
   },
   { collection: "post" },
 );
