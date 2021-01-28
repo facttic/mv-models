@@ -59,8 +59,17 @@ const ManifestationSchema = mongoose.Schema(
     ],
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
-    // TODO: mover a manifestationDAO los métodos de DAO correspondientes
+    // TODO: mover de postuserDAO a manifestationDAO los métodos de DAO correspondientes
     people: { type: Number, required: true },
+    // TODO: mover de postcrawlstatusrDAO a manifestationDAO los métodos de DAO correspondientes
+    crawlStatus: [
+      {
+        post_id_str: { type: String, trim: true, required: true, index: true },
+        post_created_at: { type: String, trim: true, required: true },
+        hashtag: { type: String, trim: true },
+        source: { type: String, trim: true, required: true, enum: ["twitter", "instagram"] },
+      },
+    ],
   },
   { collection: "manifestation" },
 );

@@ -11,3 +11,14 @@ Models and DB access for "Marchas Virtuales" project.
 ```
 $ npm install mv-models
 ```
+## Run test
+
+```
+$ npm t
+```
+
+## Run coverage
+
+```
+$ npm run coverage
+```

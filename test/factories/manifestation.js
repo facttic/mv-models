@@ -49,5 +49,14 @@ module.exports = (factory, chance) => {
     ],
     startDate: chance.date(),
     endDate: chance.date(),
+    people: chance.integer(),
+    crawlStatus: [
+      {
+        post_id_str: chance.word(),
+        post_created_at: chance.word(),
+        hashtag: chance.word(),
+        source: chance.pickone(["twitter", "instagram"]),
+      },
+    ],
   });
 };
