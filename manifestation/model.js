@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { HashtagSchema } = require("../hashtag/model");
 
 const ManifestationSchema = mongoose.Schema(
   {
@@ -43,9 +44,11 @@ const ManifestationSchema = mongoose.Schema(
         // { "name": "#quesealey", "source": "instagram" }
         // tanto IG com TW tienen que tener esta forma:
         // { "name": "quesealey", "source": "twitter" }
-        name: { type: String, trim: true, required: true },
+        // name: { type: String, trim: true, required: true },
         // const source_enum = ["instagram", "twitter"]
-        source: { type: String, trim: true, required: true },
+        // source: { type: String, trim: true, required: true },
+        type: HashtagSchema,
+        required: true,
       },
     ],
     metadata: [
@@ -56,6 +59,8 @@ const ManifestationSchema = mongoose.Schema(
     ],
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
+    // TODO: mover a manifestationDAO los métodos de DAO correspondientes
+    people: { type: Number, required: true },
   },
   { collection: "manifestation" },
 );
