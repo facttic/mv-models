@@ -16,6 +16,11 @@ $ npm install mv-models
 ```
 $ npm t
 ```
+to run a especific suite, use
+
+```
+$ npm t -- -g <name_suite>
+```
 
 ## Run coverage
 
