@@ -7,9 +7,7 @@ const { PostDAO } = require("../post/dao");
 
 // Static Methods
 ManifestationSchema.statics.createNew = async function createNew(manifestation) {
-  const _manifestation = new ManifestationDAO(manifestation);
-  const newManifestation = await _manifestation.save();
-  return newManifestation;
+  return await ManifestationDAO.create(manifestation);
 };
 
 // TODO: googlear y revisar como mergear las propiedades del objeto existente
@@ -43,9 +41,8 @@ ManifestationSchema.statics.removeById = async function removeById(_id, userId =
 };
 
 // Instance methods
-ManifestationSchema.methods.updatePersonsCount = async function updatePersonsCount() {
-  const personsCount = await PostDAO.countUsers(this._id);
-  this.persons = personsCount;
+ManifestationSchema.methods.updatePeopleCount = async function updatePeopleCount() {
+  this.people = await PostDAO.countUsers(this._id);
   return await this.save();
 };
 
