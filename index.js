@@ -14,6 +14,7 @@ async function init(dbUri) {
     useCreateIndex: true,
     autoIndex: process.env.NODE_ENV === "development",
     useUnifiedTopology: true,
+    useFindAndModify: false,
   });
 
   mongoose.connection
