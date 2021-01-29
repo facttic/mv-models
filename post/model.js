@@ -1,12 +1,11 @@
 const mongoose = require("mongoose");
-const { ManifestationDAO } = require("../manifestation/dao");
 
 const PostSchema = mongoose.Schema(
   {
     post_created_at: { type: Number, trim: true, required: true, index: true },
     post_id_str: { type: String, trim: true, required: true, index: true },
     full_text: { type: String, trim: true },
-    hastags: {
+    hashtags: {
       type: [{ type: String, trim: true }],
       required: true,
     },
@@ -38,7 +37,7 @@ const PostSchema = mongoose.Schema(
     manifestation_id: {
       type: mongoose.Types.ObjectId,
       required: true,
-      ref: ManifestationDAO,
+      ref: "Manifestation",
       index: true,
     },
   },

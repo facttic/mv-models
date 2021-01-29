@@ -8,5 +8,6 @@ factory.setAdapter(adapter);
 
 require("./manifestation")(factory, chance);
 require("./user")(factory, chance);
+require("./post")(factory, chance);
 
 module.exports = factory;

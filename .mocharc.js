@@ -6,5 +6,5 @@ chai.use(chaiAsPromised);
 module.exports = {
   require: ["test/hooks.js", "chai/register-expect"],
   recursive: true,
-  reporter: "min",
+  reporter: "dot",
 };
