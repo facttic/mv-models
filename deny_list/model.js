@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { ManifestationDAO } = require("../manifestation/dao");
 
 const DenyListSchema = mongoose.Schema(
   {
@@ -7,7 +6,7 @@ const DenyListSchema = mongoose.Schema(
     manifestation_id: {
       type: mongoose.Types.ObjectId,
       required: true,
-      ref: ManifestationDAO,
+      ref: "Manifestation",
       index: true,
     },
     // References user who was banned. Maybe change field name?
