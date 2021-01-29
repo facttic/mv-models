@@ -78,10 +78,41 @@ describe("manifestation ", () => {
     await expect(ManifestationDAO.getById(manifestation._id)).to.eventually.equal(null);
   });
 
-  // it("will update people count accordingly", async () => {
-  //   const manifestation = await factory.create("manifestation");
+  it("will update people count according to different scenarios", async () => {
+    const manifestation = await factory.create("manifestation");
 
-  //   await expect(ManifestationDAO.removeById(manifestation._id)).to.be.fulfilled;
-  //   await expect(ManifestationDAO.getById(manifestation._id)).to.eventually.equal(null);
-  // });
+    // expect 0 if no posts
+    await expect(manifestation.updatePeopleCount())
+      .to.eventually.be.an("object")
+      .that.has.property("people")
+      .which.is.equals(0);
+
+    // insert many posts created by only two users
+    await factory.createMany("post", 6, {
+      "user.id_str": "12345",
+      manifestation_id: manifestation._id,
+    });
+    await factory.createMany("post", 8, {
+      "user.id_str": "67890",
+      manifestation_id: manifestation._id,
+    });
+
+    // expect those 2 accordingly
+    await expect(manifestation.updatePeopleCount())
+      .to.eventually.be.an("object")
+      .that.has.property("people")
+      .which.is.equals(2);
+
+    // add an extra user and expect one more
+    await factory.createMany("post", 5, {
+      "user.id_str": "12390",
+      manifestation_id: manifestation._id,
+    });
+
+    // and expect one more
+    await expect(manifestation.updatePeopleCount())
+      .to.eventually.be.an("object")
+      .that.has.property("people")
+      .which.is.equals(3);
+  });
 });

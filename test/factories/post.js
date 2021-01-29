@@ -5,7 +5,7 @@ module.exports = (factory, chance) => {
     post_created_at: chance.timestamp(),
     post_id_str: chance.string({ length: 20 }),
     full_text: chance.paragraph(),
-    hashtags: chance.n(chance.word(), chance.d20()),
+    hashtags: chance.n(chance.word, chance.d20()),
     media: [
       {
         media_url: chance.url(),
