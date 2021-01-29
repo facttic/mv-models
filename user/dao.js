@@ -50,7 +50,6 @@ UserSchema.statics.findByCredentials = async (email, password) => {
   return user;
 };
 
-
 UserSchema.statics.getAll = async function getAll({ query }) {
   return await UserDAO.find({ ...query });
 };

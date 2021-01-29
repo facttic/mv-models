@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
-const { ManifestationDAO } = require("../manifestation/dao");
 
 const UserSchema = mongoose.Schema(
   {
@@ -26,7 +25,7 @@ const UserSchema = mongoose.Schema(
     manifestation_id: {
       type: mongoose.Types.ObjectId,
       required: true,
-      ref: ManifestationDAO,
+      ref: "Manifestation",
       index: true,
     },
   },
