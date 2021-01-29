@@ -7,5 +7,6 @@ const adapter = new FactoryGirl.MongooseAdapter();
 factory.setAdapter(adapter);
 
 require("./manifestation")(factory, chance);
+require("./post")(factory, chance);
 
 module.exports = factory;

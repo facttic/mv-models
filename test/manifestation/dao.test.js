@@ -77,4 +77,11 @@ describe("manifestation ", () => {
     await expect(ManifestationDAO.removeById(manifestation._id)).to.be.fulfilled;
     await expect(ManifestationDAO.getById(manifestation._id)).to.eventually.equal(null);
   });
+
+  // it("will update people count accordingly", async () => {
+  //   const manifestation = await factory.create("manifestation");
+
+  //   await expect(ManifestationDAO.removeById(manifestation._id)).to.be.fulfilled;
+  //   await expect(ManifestationDAO.getById(manifestation._id)).to.eventually.equal(null);
+  // });
 });
