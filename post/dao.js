@@ -78,8 +78,8 @@ PostSchema.statics.removeByUserId = async function removeById(twitterUserId, use
   return deleteResults;
 };
 
-PostSchema.statics.countUsers = async function countUsers() {
-  const count = await PostDAO.distinct("user.id_str").exec();
+PostSchema.statics.countUsers = async function countUsers(manifestationId) {
+  const count = await PostDAO.distinct("user.id_str", { manifestation_id: manifestationId }).exec();
   return count.length;
 };
 
