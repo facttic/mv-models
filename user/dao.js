@@ -6,9 +6,9 @@ const jwt = require("jsonwebtoken");
 
 const { UserSchema } = require("./model");
 
-UserSchema.statics.createNew = async function createNew(post) {
-  const _post = new UserDAO(post);
-  const newPost = await _post.save();
+UserSchema.statics.createNew = async function createNew(user) {
+  const _user = new UserDAO(user);
+  const newPost = await _user.save();
   return newPost;
 };
 
@@ -35,6 +35,11 @@ UserSchema.statics.removeById = async function removeById(_id, userId = null) {
   return await UserDAO.delete({ _id }, userId);
 };
 
+UserSchema.statics.findByEmail = async (email) => {
+  // Search for a user by email.
+  return await UserDAO.findOne({ email });
+};
+
 UserSchema.statics.findByCredentials = async (email, password) => {
   // Search for a user by email and password.
   const user = await UserDAO.findOne({ email });
@@ -51,7 +56,11 @@ UserSchema.statics.findByCredentials = async (email, password) => {
 };
 
 UserSchema.statics.getAll = async function getAll({ query }) {
-  return await UserDAO.find({ ...query });
+  const users = await UserDAO.find({ ...query });
+  for (let i = 0; i < users.length; i++) {
+    delete users[i]._doc.tokens;
+  }
+  return users;
 };
 
 UserSchema.pre("save", async function (next) {
@@ -66,7 +75,7 @@ UserSchema.pre("save", async function (next) {
 UserSchema.methods.generateAuthToken = async function () {
   // Generate an auth token for the user
   const user = this;
-  const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY);
+  const token = jwt.sign({ _id: user._id }, process.env.API_JWT_KEY);
   user.tokens = user.tokens.concat({ token });
   await user.save();
   return token;

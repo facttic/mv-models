@@ -24,7 +24,7 @@ const UserSchema = mongoose.Schema(
     superadmin: { type: Boolean, default: false },
     manifestation_id: {
       type: mongoose.Types.ObjectId,
-      required: true,
+      required: false,
       ref: "Manifestation",
       index: true,
     },

@@ -4,7 +4,6 @@ const { DenyListDAO } = require("./deny_list/dao");
 const { HashtagDAO } = require("./hashtag/dao");
 const { PostDAO } = require("./post/dao");
 const { PostCrawlStatusDAO } = require("./post_crawl_status/dao");
-const { PostUserDAO } = require("./post_user/dao");
 const { ManifestationDAO } = require("./manifestation/dao");
 const { UserDAO } = require("./user/dao");
 
@@ -29,7 +28,6 @@ module.exports = {
   HashtagDAO,
   PostDAO,
   PostCrawlStatusDAO,
-  PostUserDAO,
   UserDAO,
   ManifestationDAO,
   init,
