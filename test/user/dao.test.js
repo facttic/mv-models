@@ -34,7 +34,7 @@ describe("user", () => {
       await expect(UserDAO.getById(objectId)).to.eventually.equal(null);
     });
 
-    it("will return object when attempting to find an existen user by id", async () => {
+    it("will return object when attempting to find an existent user by id", async () => {
       const user = await factory.create("user");
 
       await expect(UserDAO.getById(user._id))

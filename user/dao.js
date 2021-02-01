@@ -55,8 +55,10 @@ UserSchema.statics.findByCredentials = async (email, password) => {
   return user;
 };
 
-UserSchema.statics.getAll = async function getAll({ query }) {
-  const users = await UserDAO.find({ ...query });
+UserSchema.statics.getAll = async function getAll(query) {
+  const skip = parseInt(query.skip);
+  const limit = parseInt(query.limit);
+  const users = await UserDAO.find().skip(skip).limit(limit).sort(query.sort);
   for (let i = 0; i < users.length; i++) {
     delete users[i]._doc.tokens;
   }
@@ -80,6 +82,16 @@ UserSchema.methods.generateAuthToken = async function () {
   await user.save();
   return token;
 };
+
+UserSchema.set("toJSON", {
+  transform: function (doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+    delete ret.password;
+    delete ret.deleted;
+  },
+});
 
 UserSchema.plugin(mongooseDelete, {
   deletedAt: true,
