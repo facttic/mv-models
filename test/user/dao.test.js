@@ -33,6 +33,15 @@ describe("user", () => {
       const objectId = new Types.ObjectId();
       await expect(UserDAO.getById(objectId)).to.eventually.equal(null);
     });
+
+    it("will return object when attempting to find an existen user by id", async () => {
+      const user = await factory.create("user");
+
+      await expect(UserDAO.getById(user._id))
+        .to.eventually.be.an("object")
+        .that.has.property("name")
+        .which.equals(user.name);
+    });
   });
 
   context("update", () => {
@@ -66,10 +75,6 @@ describe("user", () => {
       this.user = await factory.create("user");
     });
     it("will delete a user by id", async function () {
-      const validuser = await factory.build("user");
-
-      delete validuser._doc._id;
-
       await expect(UserDAO.removeById(this.user._id))
         .to.eventually.be.an("object")
         .that.has.property("ok")
