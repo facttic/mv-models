@@ -115,4 +115,10 @@ describe("manifestation ", () => {
       .that.has.property("people")
       .which.is.equals(3);
   });
+
+  it("will get last crawl status ordered by they _id", async () => {
+    const manifestation = await factory.create("manifestation");
+
+    expect(manifestation.getLastCrawlStatus("instagram")).to.be.an("object");
+  });
 });
