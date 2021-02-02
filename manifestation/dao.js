@@ -49,7 +49,8 @@ ManifestationSchema.methods.updatePeopleCount = async function updatePeopleCount
 };
 
 ManifestationSchema.methods.newCrawlStatus = async function newCrawlStatus(postCrawlStatus) {
-  return await this.crawlStatus.create(postCrawlStatus);
+  await this.crawlStatus.push(postCrawlStatus);
+  return this.save();
 };
 
 ManifestationSchema.methods.getLastCrawlStatus = function getLastCrawlStatusByHashtag(source) {
