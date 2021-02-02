@@ -5,6 +5,8 @@ const mongooseDelete = require("mongoose-delete");
 const { ManifestationSchema } = require("./model");
 const { PostDAO } = require("../post/dao");
 
+const _ = require("lodash");
+
 // Static Methods
 ManifestationSchema.statics.createNew = async function createNew(manifestation) {
   return await ManifestationDAO.create(manifestation);
@@ -50,16 +52,19 @@ ManifestationSchema.methods.newCrawlStatus = async function newCrawlStatus(postC
   return await this.crawlStatus.create(postCrawlStatus);
 };
 
-ManifestationSchema.methods.getLastCrawlStatusByHashtag = async function getLastCrawlStatusByHashtag(
+ManifestationSchema.methods.getLastCrawlStatus = function getLastCrawlStatusByHashtag(source) {
+  return _.chain(this.get("crawlStatus")).filter({ source }).orderBy("_id", "desc").head().value();
+};
+
+ManifestationSchema.methods.getLastCrawlStatusByHashtag = function getLastCrawlStatusByHashtag(
   source,
   hashtag,
 ) {
-  console.log(source, hashtag);
-  // post_id_str: -1 biggest on top
-  // const lastPostCrawlStatus = await PostCrawlStatusDAO.findOne({ source, hashtag })
-  //   .sort({ _id: -1 })
-  //   .exec();
-  // return lastPostCrawlStatus;
+  return _.chain(this.get("crawlStatus"))
+    .filter({ source, hashtag })
+    .orderBy("_id", "desc")
+    .head()
+    .value();
 };
 
 ManifestationSchema.plugin(mongooseDelete, {
