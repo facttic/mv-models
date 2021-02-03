@@ -11,14 +11,12 @@ const UserSchema = mongoose.Schema(
       lowercase: true,
       validate: async function (value) {
         if (!validator.isEmail(value)) {
-          throw new Error({ error: "Invalid Email address" });
+          throw new Error("Invalid Email address");
         }
-        try {
-          const user = await this.constructor.findOne({ email: value });
-          if (user) {
-            return Promise.reject(new Error("Email is in use"));
-          }
-        } catch (e) {}
+        const user = this.constructor.findByEmail && (await this.constructor.findByEmail(value));
+        if (user) {
+          throw new Error("Email is in use");
+        }
       },
     },
     password: { type: String, required: true, minLength: 7 },
