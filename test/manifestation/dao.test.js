@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 const factory = require("../factories");
 const { ManifestationDAO } = require("../../manifestation/dao");
 const { Types } = require("mongoose");
@@ -116,7 +117,7 @@ describe("manifestation ", () => {
       .which.is.equals(3);
   });
 
-  it("will get last crawl status ordered by their _id and a source", async () => {
+  it("will get last crawl status by source, ordered by their _id", async () => {
     const manifestation = await factory.create("manifestation", {
       crawlStatus: [
         { post_id_str: "1", post_created_at: "1", hashtag: "hashtag", source: "instagram" },
@@ -132,7 +133,35 @@ describe("manifestation ", () => {
       .which.equals("3");
   });
 
-  it("will will add a new crawl status accordingly", async () => {
+  it("will get last crawl status by source and hashtag ordered by their _id", async () => {
+    const manifestation = await factory.create("manifestation", {
+      crawlStatus: [
+        { post_id_str: "1", post_created_at: "1", hashtag: "everyone", source: "instagram" },
+        { post_id_str: "2", post_created_at: "2", hashtag: "noHashtag", source: "instagram" },
+        { post_id_str: "3", post_created_at: "3", hashtag: "everyone", source: "instagram" },
+        { post_id_str: "4", post_created_at: "5", hashtag: "notEveryone", source: "instagram" },
+        { post_id_str: "13", post_created_at: "13", hashtag: "everyone", source: "twitter" },
+        { post_id_str: "9", post_created_at: "9", hashtag: "everyone", source: "instagram" },
+      ],
+    });
+
+    expect(manifestation.getLastCrawlStatusByHashtag("instagram", "everyone"))
+      .to.be.an("object")
+      .that.has.property("post_id_str")
+      .which.equals("9");
+  });
+
+  it("will return undefined if there's no crawlStatus to match query", async () => {
+    const manifestation = await factory.create("manifestation", {
+      crawlStatus: [
+        { post_id_str: "1", post_created_at: "1", hashtag: "everyone", source: "instagram" },
+      ],
+    });
+
+    expect(manifestation.getLastCrawlStatusByHashtag("twitter", "everyone")).to.be.undefined;
+  });
+
+  it("will add a new crawl status accordingly", async () => {
     const manifestation = await factory.create("manifestation");
     const initialLength = manifestation.get("crawlStatus").length;
 
@@ -149,7 +178,7 @@ describe("manifestation ", () => {
       .which.has.lengthOf(initialLength + 1);
   });
 
-  it("will will fail to add a new crawl status if the doc is invalid", async () => {
+  it("will fail to add a new crawl status if the doc is invalid", async () => {
     const manifestation = await factory.create("manifestation");
     const initialLength = manifestation.get("crawlStatus").length;
 
