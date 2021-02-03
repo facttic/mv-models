@@ -9,10 +9,16 @@ const UserSchema = mongoose.Schema(
       required: true,
       unique: true,
       lowercase: true,
-      validate: (value) => {
+      validate: async function (value) {
         if (!validator.isEmail(value)) {
           throw new Error({ error: "Invalid Email address" });
         }
+        try {
+          const user = await this.constructor.findOne({ email: value });
+          if (user) {
+            return Promise.reject(new Error("Email is in use"));
+          }
+        } catch (e) {}
       },
     },
     password: { type: String, required: true, minLength: 7 },

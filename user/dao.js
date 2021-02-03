@@ -79,7 +79,9 @@ UserSchema.methods.generateAuthToken = async function () {
   const user = this;
   const token = jwt.sign({ _id: user._id }, process.env.API_JWT_KEY);
   user.tokens = user.tokens.concat({ token });
-  await user.save();
+  await UserDAO.findByIdAndUpdate({ _id: user._id }, user, {
+    runValidators: true,
+  }).exec();
   return token;
 };
 
@@ -88,6 +90,7 @@ UserSchema.set("toJSON", {
     ret.id = ret._id;
     delete ret._id;
     delete ret.__v;
+    delete ret.tokens;
     delete ret.password;
     delete ret.deleted;
   },

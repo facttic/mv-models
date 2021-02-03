@@ -14,6 +14,13 @@ describe("user", () => {
       });
     });
 
+    it("cannot create user with an existent email", async () => {
+      const user = await factory.create("user");
+      const userToAdd = await factory.build("user", { email: user.email });
+      delete userToAdd._doc._id;
+      await expect(UserDAO.createNew(userToAdd)).to.be.rejectedWith("Email is in use");
+    });
+
     it("will throw if creation body is invalid", async () => {
       const invalidUser = await factory.build("user", { name: null });
       await expect(UserDAO.createNew(invalidUser)).to.be.rejectedWith("User validation failed");
