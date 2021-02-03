@@ -6,30 +6,9 @@ const ManifestationSchema = mongoose.Schema(
     name: { type: String, trim: true, required: true },
     uri: { type: String, trim: true, required: true },
     title: { type: String, trim: true, required: true },
+    subtitle: { type: String, trim: true, required: true },
     description: { type: String, trim: true, required: true },
     footer: { type: String, trim: true, required: true },
-    stylesOverride: { type: String, trim: true, required: true },
-    styles: {
-      colors: {
-        background: { type: String, trim: true, required: true },
-        foreground: { type: String, trim: true, required: true },
-        accent: { type: String, trim: true, required: true },
-      },
-      // que posiblemente tenga forma de uri
-      font: { type: String, trim: true, required: true },
-      cards: {
-        columns: { type: Number, required: true },
-        width: { type: Number, required: true },
-        height: { type: Number, required: true },
-        colors: {
-          hover: { type: String, trim: true, required: true },
-          border: { type: String, trim: true, required: true },
-        },
-      },
-    },
-    images: {
-      header: { type: String, trim: true, required: true },
-    },
     sponsors: [
       {
         name: { type: String, trim: true, required: true },
@@ -41,27 +20,15 @@ const ManifestationSchema = mongoose.Schema(
       {
         // nota: hashtags en IG incluyen # y en TW no
         // TODO: normalizar todo sin almohadita
-        // { "name": "#quesealey", "source": "instagram" }
-        // tanto IG com TW tienen que tener esta forma:
-        // { "name": "quesealey", "source": "twitter" }
-        // name: { type: String, trim: true, required: true },
-        // const source_enum = ["instagram", "twitter"]
-        // source: { type: String, trim: true, required: true },
         type: HashtagSchema,
         required: true,
       },
     ],
-    metadata: [
-      {
-        name: { type: String, trim: true, required: true },
-        value: { type: String, trim: true, required: true },
-      },
-    ],
-    startDate: { type: Date, required: true },
-    endDate: { type: Date, required: true },
-    // TODO: mover de postuserDAO a manifestationDAO los métodos de DAO correspondientes
-    people: { type: Number, required: true },
-    // TODO: mover de postcrawlstatusrDAO a manifestationDAO los métodos de DAO correspondientes
+    metadata: {
+      title: { type: String, trim: true, required: true },
+      keywords: { type: String, trim: true, required: true },
+      description: { type: String, trim: true, required: true },
+    },
     crawlStatus: [
       {
         post_id_str: { type: String, trim: true, required: true, index: true },
@@ -70,6 +37,53 @@ const ManifestationSchema = mongoose.Schema(
         source: { type: String, trim: true, required: true, enum: ["twitter", "instagram"] },
       },
     ],
+    // podemos evaluarlo, pero por ahora no lo vamos a usar.
+    // stylesOverride: { type: String, trim: true, required: true },
+    styles: {
+      colors: {
+        background: { type: String, trim: true, required: true },
+        // se usará para texto: links, hashtags
+        accent: { type: String, trim: true, required: true },
+      },
+      text: {
+        title: {
+          font: { type: String, trim: true, required: true },
+          color: { type: String, trim: true, required: true },
+        },
+        subtitle: {
+          font: { type: String, trim: true, required: true },
+          color: { type: String, trim: true, required: true },
+        },
+        // se usará para text de cards posts body
+        body: {
+          font: { type: String, trim: true, required: true },
+          color: { type: String, trim: true, required: true },
+        },
+      },
+      thumbnails: {
+        // TODO: habría un map entre cantidad de columnas y tamaños
+        // 7: columnas 500px x 500px
+        columns: { type: Number, required: true, enum: [7, 8, 9, 10] },
+        colors: {
+          hover: { type: String, trim: true, required: true },
+          border: { type: String, trim: true, required: true },
+        },
+      },
+      cards: {
+        darkMode: { type: Boolean, default: false },
+      },
+    },
+    images: {
+      header: { type: String, trim: true, required: true },
+      favicon: { type: String, trim: true, required: true },
+      og: {
+        twitter: { type: String, trim: true, required: true },
+        facebook: { type: String, trim: true, required: true },
+      },
+    },
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
+    people: { type: Number, required: true },
   },
   { collection: "manifestation" },
 );

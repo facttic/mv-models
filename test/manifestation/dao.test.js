@@ -115,4 +115,58 @@ describe("manifestation ", () => {
       .that.has.property("people")
       .which.is.equals(3);
   });
+
+  it("will get last crawl status ordered by their _id and a source", async () => {
+    const manifestation = await factory.create("manifestation", {
+      crawlStatus: [
+        { post_id_str: "1", post_created_at: "1", hashtag: "hashtag", source: "instagram" },
+        { post_id_str: "2", post_created_at: "2", hashtag: "noHashtag", source: "instagram" },
+        { post_id_str: "3", post_created_at: "3", hashtag: "everyone", source: "instagram" },
+        { post_id_str: "13", post_created_at: "13", hashtag: "everyone", source: "twitter" },
+      ],
+    });
+
+    expect(manifestation.getLastCrawlStatus("instagram"))
+      .to.be.an("object")
+      .that.has.property("post_id_str")
+      .which.equals("3");
+  });
+
+  it("will will add a new crawl status accordingly", async () => {
+    const manifestation = await factory.create("manifestation");
+    const initialLength = manifestation.get("crawlStatus").length;
+
+    const newCrawlStatus = {
+      post_id_str: "123456789",
+      post_created_at: "123456789",
+      hashtag: "hashtag",
+      source: "instagram",
+    };
+
+    await expect(manifestation.newCrawlStatus(newCrawlStatus))
+      .to.eventually.be.an("object")
+      .that.has.property("crawlStatus")
+      .which.has.lengthOf(initialLength + 1);
+  });
+
+  it("will will fail to add a new crawl status if the doc is invalid", async () => {
+    const manifestation = await factory.create("manifestation");
+    const initialLength = manifestation.get("crawlStatus").length;
+
+    const newCrawlStatus = {
+      post_id_str: null,
+      post_created_at: "44444",
+      hashtag: "hashtag",
+      source: "instagram",
+    };
+
+    await expect(manifestation.newCrawlStatus(newCrawlStatus)).to.be.rejectedWith(
+      "Manifestation validation failed",
+    );
+
+    await expect(ManifestationDAO.getById(manifestation._id))
+      .to.eventually.be.an("object")
+      .that.has.property("crawlStatus")
+      .which.has.lengthOf(initialLength);
+  });
 });
