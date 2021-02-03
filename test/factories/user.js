@@ -2,7 +2,7 @@ const { UserDAO } = require("../../user/dao");
 module.exports = (factory, chance) => {
   factory.define("user", UserDAO, {
     name: chance.name(),
-    email: chance.email({ domain: "facttic.org.ar" }),
+    email: factory.sequence("user.email", (n) => `dummy-user-${n}@facttic.org.ar`),
     password: chance.word({ length: 8 }),
     tokens: [
       {
