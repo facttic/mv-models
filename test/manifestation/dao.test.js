@@ -273,7 +273,7 @@ describe("manifestation", () => {
         .which.has.lengthOf(0);
     });
 
-    it("will delete a hastag by _id", async () => {
+    it("will delete a hashtag by _id", async () => {
       const manifestation = await factory.create("manifestation");
       const initialLength = manifestation.get("hashtags").length;
       const _id = manifestation.get("hashtags")[0]._id;
@@ -284,14 +284,14 @@ describe("manifestation", () => {
         .which.has.lengthOf(initialLength - 1);
     });
 
-    it("will fail to delete a hastag with an unexistent _id", async () => {
+    it("will fail to delete a hashtag with an unexistent _id", async () => {
       const manifestation = await factory.create("manifestation");
       const _id = Types.ObjectId();
 
       await expect(manifestation.deleteHashtag(_id)).to.eventually.equal(null);
     });
 
-    it("will update a hastag by _id", async () => {
+    it("will update a hashtag by _id", async () => {
       const manifestation = await factory.create("manifestation");
       const initialLength = manifestation.get("hashtags").length;
       const _id = manifestation.get("hashtags")[0]._id;
@@ -305,7 +305,7 @@ describe("manifestation", () => {
       expect(manifestation.get("hashtags")[0].name).to.be.equal(hashtag.name);
     });
 
-    it("will fail to update a hastag by _id with invalid properties", async () => {
+    it("will fail to update a hashtag by _id with invalid properties", async () => {
       const manifestation = await factory.create("manifestation");
       const _id = manifestation.get("hashtags")[0]._id;
       const hashtag = buildHashtag({ name: null });
@@ -313,6 +313,14 @@ describe("manifestation", () => {
       await expect(manifestation.updateHashtag(_id, hashtag)).to.be.rejectedWith(
         "validation failed",
       );
+    });
+
+    it("will fail to update a hashtag with an unexistent _id", async () => {
+      const manifestation = await factory.create("manifestation");
+      const hashtag = buildHashtag();
+      const _id = Types.ObjectId();
+
+      await expect(manifestation.updateHashtag(_id, hashtag)).to.eventually.equal(null);
     });
   });
 });
