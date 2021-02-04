@@ -1,6 +1,7 @@
 const { PostDAO } = require("../../post/dao");
+const chance = require("chance").Chance();
 
-module.exports = (factory, chance) => {
+module.exports = (factory) => {
   factory.define("post", PostDAO, {
     post_created_at: chance.timestamp(),
     post_id_str: chance.string({ length: 20 }),

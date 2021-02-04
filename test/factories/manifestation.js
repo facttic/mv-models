@@ -1,6 +1,7 @@
 const { ManifestationDAO } = require("../../manifestation/dao");
+const chance = require("chance").Chance();
 
-module.exports = (factory, chance) => {
+module.exports = (factory) => {
   factory.define("manifestation", ManifestationDAO, {
     name: chance.name(),
     uri: chance.url(),
@@ -8,26 +9,14 @@ module.exports = (factory, chance) => {
     subtitle: chance.sentence(),
     description: chance.paragraph(),
     footer: chance.paragraph(),
-    sponsors: [
-      {
-        name: chance.company(),
-        logoUri: chance.url(),
-        pageUri: chance.url(),
-      },
-    ],
-    hashtags: [
-      {
-        name: chance.hashtag(),
-        source: chance.pickone(["twitter", "instagram"]),
-      },
-    ],
+    sponsors: chance.n(() => buildSponsor(), chance.d20()),
+    hashtags: chance.unique(() => buildHashtag(), chance.d20()),
     metadata: {
       title: chance.sentence(),
       keywords: chance.sentence(),
       description: chance.sentence(),
     },
-
-    crawlStatuses: chance.n(() => buildCrawlStatus(chance), chance.d20()),
+    crawlStatuses: chance.n(() => buildCrawlStatus(), chance.d20()),
     styles: {
       colors: {
         background: chance.color({ format: "hex" }),
@@ -72,11 +61,39 @@ module.exports = (factory, chance) => {
   });
 };
 
-function buildCrawlStatus(chance) {
-  return {
-    post_id_str: chance.word(),
-    post_created_at: chance.word(),
-    hashtag: chance.word(),
-    source: chance.pickone(["twitter", "instagram"]),
-  };
-}
+const buildCrawlStatus = function buildCrawlStatus(attrs = {}) {
+  return Object.assign(
+    {
+      post_id_str: chance.word(),
+      post_created_at: chance.word(),
+      hashtag: chance.word(),
+      source: chance.pickone(["twitter", "instagram"]),
+    },
+    attrs,
+  );
+};
+
+const buildHashtag = function buildHashtag(attrs = {}) {
+  return Object.assign(
+    {
+      name: chance.word(),
+      source: chance.pickone(["twitter", "instagram"]),
+    },
+    attrs,
+  );
+};
+
+const buildSponsor = function buildSponsor(attrs = {}) {
+  return Object.assign(
+    {
+      name: chance.company(),
+      logoUri: chance.url(),
+      pageUri: chance.url(),
+    },
+    attrs,
+  );
+};
+
+module.exports.buildCrawlStatus = buildCrawlStatus;
+module.exports.buildHashtag = buildHashtag;
+module.exports.buildSponsor = buildSponsor;

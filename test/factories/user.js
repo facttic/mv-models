@@ -1,5 +1,7 @@
 const { UserDAO } = require("../../user/dao");
-module.exports = (factory, chance) => {
+const chance = require("chance").Chance();
+
+module.exports = (factory) => {
   factory.define("user", UserDAO, {
     name: chance.name(),
     email: factory.sequence("user.email", (n) => `dummy-user-${n}@facttic.org.ar`),
