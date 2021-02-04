@@ -29,7 +29,7 @@ const ManifestationSchema = mongoose.Schema(
       keywords: { type: String, trim: true, required: true },
       description: { type: String, trim: true, required: true },
     },
-    crawlStatus: [
+    crawlStatuses: [
       {
         post_id_str: { type: String, trim: true, required: true, index: true },
         post_created_at: { type: String, trim: true, required: true },

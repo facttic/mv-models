@@ -27,7 +27,7 @@ module.exports = (factory, chance) => {
       description: chance.sentence(),
     },
 
-    crawlStatus: chance.n(() => buildCrawlStatus(chance), chance.d20()),
+    crawlStatuses: chance.n(() => buildCrawlStatus(chance), chance.d20()),
     styles: {
       colors: {
         background: chance.color({ format: "hex" }),

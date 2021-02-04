@@ -49,23 +49,36 @@ ManifestationSchema.methods.updatePeopleCount = async function updatePeopleCount
 };
 
 ManifestationSchema.methods.newCrawlStatus = async function newCrawlStatus(postCrawlStatus) {
-  await this.crawlStatus.push(postCrawlStatus);
+  await this.crawlStatuses.push(postCrawlStatus);
   return this.save();
 };
 
 ManifestationSchema.methods.getLastCrawlStatus = function getLastCrawlStatusByHashtag(source) {
-  return _.chain(this.get("crawlStatus")).filter({ source }).orderBy("_id", "desc").head().value();
+  return _.chain(this.get("crawlStatuses"))
+    .filter({ source })
+    .orderBy("_id", "desc")
+    .head()
+    .value();
 };
 
 ManifestationSchema.methods.getLastCrawlStatusByHashtag = function getLastCrawlStatusByHashtag(
   source,
   hashtag,
 ) {
-  return _.chain(this.get("crawlStatus"))
+  return _.chain(this.get("crawlStatuses"))
     .filter({ source, hashtag })
     .orderBy("_id", "desc")
     .head()
     .value();
+};
+
+ManifestationSchema.methods.newHashtag = async function newHashtag(hashtag) {
+  await this.hashtags.push(hashtag);
+  return this.save();
+};
+
+ManifestationSchema.methods.getAllHashtags = function getAllHashtags() {
+  // _.chain(this.get("crawlStatus")).filter({ source }).orderBy("_id", "desc").head().value();
 };
 
 ManifestationSchema.plugin(mongooseDelete, {
