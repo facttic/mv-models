@@ -98,7 +98,7 @@ ManifestationSchema.methods.getHashtagsBySource = function getHashtagsBySource(s
 ManifestationSchema.methods.deleteHashtag = async function deleteHashtag(_id) {
   const existingHashtag = this.hashtags.id(_id);
   if (!existingHashtag) {
-    return null;
+    throw new Error("Hashtag does not exist");
   }
 
   existingHashtag.remove();
@@ -108,7 +108,7 @@ ManifestationSchema.methods.deleteHashtag = async function deleteHashtag(_id) {
 ManifestationSchema.methods.updateHashtag = async function updateHashtag(_id, hashtag) {
   const existingHashtag = this.hashtags.id(_id);
   if (!existingHashtag) {
-    return null;
+    throw new Error("Hashtag does not exist");
   }
 
   Object.assign(existingHashtag, hashtag);

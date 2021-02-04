@@ -77,6 +77,17 @@ describe("manifestation", () => {
         ManifestationDAO.udpate(manifestation._id, invalidManifestation),
       ).to.be.rejectedWith("Validation failed");
     });
+
+    // TODO: check if we need to throw on unexistent
+    it("will return null when trying to update an unexistent manifestation", async () => {
+      const validManifestation = await factory.build("manifestation");
+
+      delete validManifestation._doc._id;
+
+      await expect(
+        ManifestationDAO.udpate(new Types.ObjectId(), validManifestation),
+      ).to.eventually.equal(null);
+    });
   });
 
   context("delete", () => {
@@ -288,7 +299,7 @@ describe("manifestation", () => {
       const manifestation = await factory.create("manifestation");
       const _id = Types.ObjectId();
 
-      await expect(manifestation.deleteHashtag(_id)).to.eventually.equal(null);
+      await expect(manifestation.deleteHashtag(_id)).to.be.rejectedWith("Hashtag does not exist");
     });
 
     it("will update a hashtag by _id", async () => {
@@ -320,7 +331,9 @@ describe("manifestation", () => {
       const hashtag = buildHashtag();
       const _id = Types.ObjectId();
 
-      await expect(manifestation.updateHashtag(_id, hashtag)).to.eventually.equal(null);
+      await expect(manifestation.updateHashtag(_id, hashtag)).to.be.rejectedWith(
+        "Hashtag does not exist",
+      );
     });
   });
 });
