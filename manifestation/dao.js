@@ -49,8 +49,8 @@ ManifestationSchema.methods.updatePeopleCount = async function updatePeopleCount
 };
 
 ManifestationSchema.methods.newCrawlStatus = async function newCrawlStatus(postCrawlStatus) {
-  await this.crawlStatuses.push(postCrawlStatus);
-  return this.save();
+  this.crawlStatuses.push(postCrawlStatus);
+  return await this.save();
 };
 
 ManifestationSchema.methods.getLastCrawlStatus = function getLastCrawlStatusByHashtag(source) {
@@ -73,12 +73,46 @@ ManifestationSchema.methods.getLastCrawlStatusByHashtag = function getLastCrawlS
 };
 
 ManifestationSchema.methods.newHashtag = async function newHashtag(hashtag) {
-  await this.hashtags.push(hashtag);
-  return this.save();
+  this.hashtags.push(hashtag);
+  return await this.save();
 };
 
 ManifestationSchema.methods.getAllHashtags = function getAllHashtags() {
-  // _.chain(this.get("crawlStatus")).filter({ source }).orderBy("_id", "desc").head().value();
+  const hashtags = _.chain(this.get("hashtags")).orderBy("_id", "desc").value();
+
+  return {
+    count: hashtags.length,
+    list: hashtags,
+  };
+};
+
+ManifestationSchema.methods.getHashtagsBySource = function getHashtagsBySource(source) {
+  const hashtags = _.chain(this.get("hashtags")).filter({ source }).orderBy("_id", "desc").value();
+
+  return {
+    count: hashtags.length,
+    list: hashtags,
+  };
+};
+
+ManifestationSchema.methods.deleteHashtag = async function deleteHashtag(_id) {
+  const existingHashtag = this.hashtags.id(_id);
+  if (!existingHashtag) {
+    return null;
+  }
+
+  existingHashtag.remove();
+  return await this.save();
+};
+
+ManifestationSchema.methods.updateHashtag = async function updateHashtag(_id, hashtag) {
+  const existingHashtag = this.hashtags.id(_id);
+  if (!existingHashtag) {
+    return null;
+  }
+
+  Object.assign(existingHashtag, hashtag);
+  return await this.save();
 };
 
 ManifestationSchema.plugin(mongooseDelete, {
