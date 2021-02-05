@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const { DenyListDAO } = require("./deny_list/dao");
-const { HashtagDAO } = require("./hashtag/dao");
 const { PostDAO } = require("./post/dao");
 const { ManifestationDAO } = require("./manifestation/dao");
 const { UserDAO } = require("./user/dao");
@@ -24,7 +23,6 @@ async function init(dbUri) {
 
 module.exports = {
   DenyListDAO,
-  HashtagDAO,
   PostDAO,
   UserDAO,
   ManifestationDAO,
