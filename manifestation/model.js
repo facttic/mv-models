@@ -85,7 +85,10 @@ const ManifestationSchema = mongoose.Schema(
     endDate: { type: Date, required: true },
     people: { type: Number, required: true },
   },
-  { collection: "manifestation" },
+  {
+    collection: "manifestation",
+    timestamps: true,
+  },
 );
 
 module.exports = {

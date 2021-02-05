@@ -12,7 +12,10 @@ const DenyListSchema = mongoose.Schema(
     // References user who was banned. Maybe change field name?
     user_id_str: { type: String, trim: true, required: true },
   },
-  { collection: "deny_list" },
+  {
+    collection: "deny_list",
+    timestamps: true,
+  },
 );
 
 module.exports = {

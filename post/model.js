@@ -41,7 +41,10 @@ const PostSchema = mongoose.Schema(
       index: true,
     },
   },
-  { collection: "post" },
+  {
+    collection: "post",
+    timestamps: true,
+  },
 );
 
 module.exports = {
