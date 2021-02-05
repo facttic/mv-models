@@ -9,43 +9,34 @@ const ManifestationSchema = mongoose.Schema(
     subtitle: { type: String, trim: true, default: "" },
     description: { type: String, trim: true, default: "" },
     footer: { type: String, trim: true, default: "" },
-    sponsors: {
-      type: [
-        {
-          name: { type: String, trim: true, required: true },
-          logoUri: { type: String, trim: true, required: true },
-          pageUri: { type: String, trim: true, required: true },
-        },
-      ],
-      default: undefined,
-    },
-    hashtags: {
-      type: [
-        {
-          // nota: hashtags en IG incluyen # y en TW no
-          // TODO: normalizar todo sin almohadita
-          type: HashtagSchema,
-          required: true,
-        },
-      ],
-      default: undefined,
-    },
+    sponsors: [
+      {
+        name: { type: String, trim: true, required: true },
+        logoUri: { type: String, trim: true, required: true },
+        pageUri: { type: String, trim: true, required: true },
+      },
+    ],
+    hashtags: [
+      {
+        // nota: hashtags en IG incluyen # y en TW no
+        // TODO: normalizar todo sin almohadita
+        type: HashtagSchema,
+        required: true,
+      },
+    ],
     metadata: {
       title: { type: String, trim: true, default: "" },
       keywords: { type: String, trim: true, default: "" },
       description: { type: String, trim: true, default: "" },
     },
-    crawlStatuses: {
-      type: [
-        {
-          post_id_str: { type: String, trim: true, required: true, index: true },
-          post_created_at: { type: String, trim: true, required: true },
-          hashtag: { type: String, trim: true },
-          source: { type: String, trim: true, required: true, enum: ["twitter", "instagram"] },
-        },
-      ],
-      default: undefined,
-    },
+    crawlStatuses: [
+      {
+        post_id_str: { type: String, trim: true, required: true, index: true },
+        post_created_at: { type: String, trim: true, required: true },
+        hashtag: { type: String, trim: true },
+        source: { type: String, trim: true, required: true, enum: ["twitter", "instagram"] },
+      },
+    ],
     // podemos evaluarlo, pero por ahora no lo vamos a usar.
     // stylesOverride: { type: String, trim: true, required: true },
     styles: {
