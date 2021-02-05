@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define */
 const mongoose = require("mongoose");
+const mongooseDelete = require("mongoose-delete");
 
 const { DenyListSchema } = require("./model");
 
@@ -49,6 +50,13 @@ DenyListSchema.statics.isDenyListedByManifestationId = async function isDenyList
     user_id_str: idStr,
   });
 };
+
+DenyListSchema.plugin(mongooseDelete, {
+  deletedAt: true,
+  deletedBy: true,
+  overrideMethods: true,
+  indexFields: ["deleted"],
+});
 
 const DenyListDAO = mongoose.model("DenyList", DenyListSchema);
 
