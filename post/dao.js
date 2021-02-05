@@ -33,6 +33,24 @@ PostSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) 
   };
 };
 
+PostSchema.statics.getAllByManifestationId = async function getAllByManifestationId(
+  manifestationId,
+  { skip, limit, sort, query },
+) {
+  const postsTotal = await PostDAO.countDocuments({ manifestation_id: manifestationId });
+
+  const posts = await PostDAO.find({ ...query, manifestation_id: manifestationId })
+    .skip(skip)
+    .limit(limit)
+    .sort(sort);
+
+  return {
+    count: posts.length,
+    list: posts,
+    total: postsTotal,
+  };
+};
+
 PostSchema.statics.removeByUserId = async function removeById(twitterUserId, userId) {
   const deleteResults = await PostDAO.delete({ "user.id_str": twitterUserId }, userId);
   return deleteResults;
@@ -53,6 +71,14 @@ PostSchema.statics.findByIdStr = async function findByIdStr(postIdStr, source) {
 PostSchema.statics.removeById = async function removeById(_id, userId = null) {
   const deleteResults = await PostDAO.delete({ _id }, userId);
   return deleteResults;
+};
+
+PostSchema.statics.removeByManifestationId = async function removeByManifestationId(
+  manifestationId,
+  _id,
+  userId = null,
+) {
+  return await PostDAO.delete({ _id, manifestation_id: manifestationId }, userId);
 };
 
 PostSchema.plugin(mongooseDelete, {
