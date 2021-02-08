@@ -4,6 +4,10 @@ module.exports = {
   rules: {
     "one-var": ["error", "never"],
     "prettier/prettier": "error",
+    "no-unused-vars": [
+      2,
+      { vars: "all", varsIgnorePattern: "^_", args: "all", argsIgnorePattern: "^_" },
+    ],
   },
   env: {
     node: true,
