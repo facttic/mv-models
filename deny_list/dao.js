@@ -9,7 +9,7 @@ DenyListSchema.statics.createNew = async function createNew(denyList) {
 };
 
 DenyListSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
-  const denyListsCount = await this.model("DenyList").countDocuments({ deleted: false });
+  const denyListsCount = await this.model("DenyList").countDocuments({});
   const denyLists = await this.model("DenyList")
     .find({ ...query })
     .skip(skip)
@@ -27,7 +27,7 @@ DenyListSchema.statics.getAllByManifestationId = async function getAllByManifest
   manifestationId,
   { skip, limit, sort, query },
 ) {
-  const denyListsCount = await DenyListDAO.countDocuments({ deleted: false });
+  const denyListsCount = await DenyListDAO.countDocuments({});
   const denyLists = await DenyListDAO.find({ manifestation_id: manifestationId, ...query })
     .skip(skip)
     .limit(limit)
