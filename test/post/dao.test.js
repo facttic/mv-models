@@ -163,7 +163,7 @@ describe("post", () => {
       const post = await factory.create("post");
       const objectId = new Types.ObjectId();
 
-      await expect(PostDAO.removeById(objectId, post._id)).to.be.rejectedWith(
+      await expect(PostDAO.removeByManifestationId(objectId, post._id)).to.be.rejectedWith(
         "Post does not exist",
       );
     });
