@@ -8,5 +8,6 @@ factory.setAdapter(adapter);
 require("./manifestation")(factory);
 require("./user")(factory);
 require("./post")(factory);
+require("./deny_list")(factory);
 
 module.exports = factory;
