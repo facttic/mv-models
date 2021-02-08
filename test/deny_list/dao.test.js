@@ -99,7 +99,7 @@ describe("denylist", () => {
     it("will return a denyList by its user_id_str", async () => {
       const denyList = await factory.create("deny_list");
 
-      await expect(DenyListDAO.isDenyListed(denyList.user_id_str))
+      await expect(DenyListDAO.getByUserIdStr(denyList.user_id_str))
         .to.eventually.be.an("object")
         .that.has.property("user_id_str")
         .which.equals(denyList.user_id_str);
@@ -108,7 +108,7 @@ describe("denylist", () => {
     it("will return null if there's no denyList with a user_id_str", async () => {
       await factory.create("deny_list");
 
-      await expect(DenyListDAO.isDenyListed("123noestadeshabilitado")).to.eventually.equal(null);
+      await expect(DenyListDAO.getByUserIdStr("123noestadeshabilitado")).to.eventually.equal(null);
     });
 
     it("will return a denyList by its user_id_str and a manifestation_id", async () => {
@@ -116,7 +116,7 @@ describe("denylist", () => {
       const denyList = await factory.create("deny_list", { manifestation_id: manifestation._id });
 
       await expect(
-        DenyListDAO.isDenyListedByManifestationId(manifestation._id, denyList.user_id_str),
+        DenyListDAO.getByUserIdStrByManifestationId(manifestation._id, denyList.user_id_str),
       )
         .to.eventually.be.an("object")
         .that.has.property("user_id_str")
@@ -130,7 +130,7 @@ describe("denylist", () => {
 
       // will not get it in manifestation2
       await expect(
-        DenyListDAO.isDenyListedByManifestationId(manifestation2._id, denyList.user_id_str),
+        DenyListDAO.getByUserIdStrByManifestationId(manifestation2._id, denyList.user_id_str),
       ).to.eventually.equal(null);
     });
   });

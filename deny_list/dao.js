@@ -9,9 +9,8 @@ DenyListSchema.statics.createNew = async function createNew(denyList) {
 };
 
 DenyListSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
-  const denyListsCount = await this.model("DenyList").countDocuments({});
-  const denyLists = await this.model("DenyList")
-    .find({ ...query })
+  const denyListsCount = await DenyListDAO.countDocuments({});
+  const denyLists = await DenyListDAO.find({ ...query })
     .skip(skip)
     .limit(limit)
     .sort(sort);
@@ -44,17 +43,17 @@ DenyListSchema.statics.getById = async function getById(_id) {
   return await DenyListDAO.findOne({ _id });
 };
 
-DenyListSchema.statics.isDenyListed = async function isDenyListed(idStr) {
-  return await DenyListDAO.findOne({ user_id_str: idStr });
+DenyListSchema.statics.getByUserIdStr = async function getByUserIdStr(userIdStr) {
+  return await DenyListDAO.findOne({ user_id_str: userIdStr });
 };
 
-DenyListSchema.statics.isDenyListedByManifestationId = async function isDenyListedByManifestationId(
+DenyListSchema.statics.getByUserIdStrByManifestationId = async function getByUserIdStrByManifestationId(
   manifestationId,
-  idStr,
+  userIdStr,
 ) {
   return await DenyListDAO.findOne({
     manifestation_id: manifestationId,
-    user_id_str: idStr,
+    user_id_str: userIdStr,
   });
 };
 
