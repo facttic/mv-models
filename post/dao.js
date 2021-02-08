@@ -11,11 +11,7 @@ PostSchema.statics.createNew = async function createNew(post) {
 };
 
 PostSchema.statics.insertMany = async function insertMany(posts) {
-  const options = {
-    ordered: false,
-  };
-  const newPosts = await this.model("Post").collection.insertMany(posts, options);
-  return newPosts;
+  return await this.model("Post").collection.insertMany(posts, { ordered: false });
 };
 
 PostSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
@@ -51,12 +47,13 @@ PostSchema.statics.getAllByManifestationId = async function getAllByManifestatio
   };
 };
 
-PostSchema.statics.removeByUserId = async function removeById(twitterUserId, userId) {
-  const deleteResults = await PostDAO.delete({ "user.id_str": twitterUserId }, userId);
-  return deleteResults;
+PostSchema.statics.removeByUserId = async function removeById(userIdStr, userId) {
+  return await PostDAO.delete({ "user.id_str": userIdStr }, userId);
 };
 
-PostSchema.statics.countUsers = async function countUsers(manifestationId) {
+PostSchema.statics.countUsersByManifestationId = async function countUsersByManifestationId(
+  manifestationId,
+) {
   const peopleCount = await PostDAO.distinct("user.id_str", {
     manifestation_id: manifestationId,
   }).exec();
@@ -64,13 +61,11 @@ PostSchema.statics.countUsers = async function countUsers(manifestationId) {
 };
 
 PostSchema.statics.findByIdStr = async function findByIdStr(postIdStr, source) {
-  const found = await PostDAO.findOne({ post_id_str: postIdStr, source }).exec();
-  return found;
+  return await PostDAO.findOne({ post_id_str: postIdStr, source }).exec();
 };
 
 PostSchema.statics.removeById = async function removeById(_id, userId = null) {
-  const deleteResults = await PostDAO.delete({ _id }, userId);
-  return deleteResults;
+  return await PostDAO.delete({ _id }, userId);
 };
 
 PostSchema.statics.removeByManifestationId = async function removeByManifestationId(
