@@ -41,7 +41,10 @@ const UserSchema = mongoose.Schema(
       },
     },
   },
-  { collection: "user" },
+  {
+    collection: "user",
+    timestamps: true,
+  },
 );
 
 module.exports = {

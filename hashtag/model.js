@@ -5,7 +5,10 @@ const HashtagSchema = mongoose.Schema(
     name: { type: String, trim: true, required: true },
     source: { type: String, trim: true, required: true, enum: ["twitter", "instagram"] },
   },
-  { collection: "hashtag" },
+  {
+    collection: "hashtag",
+    timestamps: true,
+  },
 );
 
 module.exports = {

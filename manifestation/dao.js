@@ -21,7 +21,7 @@ ManifestationSchema.statics.udpate = async function udpate(_id, manifestation) {
 };
 
 ManifestationSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
-  const manifestationsTotal = await ManifestationDAO.countDocuments({});
+  const manifestationsTotal = await ManifestationDAO.countDocuments({ deleted: false });
   const manifestations = await ManifestationDAO.find({ ...query })
     .skip(skip)
     .limit(limit)
