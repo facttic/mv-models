@@ -43,7 +43,7 @@ ManifestationSchema.statics.removeById = async function removeById(_id, userId =
 
 // Instance methods
 ManifestationSchema.methods.updatePeopleCount = async function updatePeopleCount() {
-  this.people = await PostDAO.countUsers(this._id);
+  this.people = await PostDAO.countUsersByManifestationId(this._id);
   return await this.save();
 };
 

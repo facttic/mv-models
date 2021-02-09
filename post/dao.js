@@ -5,17 +5,11 @@ const mongooseDelete = require("mongoose-delete");
 const { PostSchema } = require("./model");
 
 PostSchema.statics.createNew = async function createNew(post) {
-  const _post = new PostDAO(post);
-  const newPost = await _post.save();
-  return newPost;
+  return await PostDAO.create(post);
 };
 
-PostSchema.statics.insertMany = async function insertMany(posts) {
-  const options = {
-    ordered: false,
-  };
-  const newPosts = await this.model("Post").collection.insertMany(posts, options);
-  return newPosts;
+PostSchema.statics.createMany = async function createMany(posts) {
+  return await PostDAO.insertMany(posts, { ordered: false });
 };
 
 PostSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
@@ -51,26 +45,31 @@ PostSchema.statics.getAllByManifestationId = async function getAllByManifestatio
   };
 };
 
-PostSchema.statics.removeByUserId = async function removeById(twitterUserId, userId) {
-  const deleteResults = await PostDAO.delete({ "user.id_str": twitterUserId }, userId);
-  return deleteResults;
+PostSchema.statics.getByPostIdStrBySource = async function getByPostIdStrBySource(
+  postIdStr,
+  source,
+) {
+  return await PostDAO.findOne({ post_id_str: postIdStr, source }).exec();
 };
 
-PostSchema.statics.countUsers = async function countUsers(manifestationId) {
-  const peopleCount = await PostDAO.distinct("user.id_str", {
-    manifestation_id: manifestationId,
-  }).exec();
-  return peopleCount.length;
+PostSchema.statics.getById = async function getById(_id) {
+  return await PostDAO.findOne({ _id });
 };
 
-PostSchema.statics.findByIdStr = async function findByIdStr(postIdStr, source) {
-  const found = await PostDAO.findOne({ post_id_str: postIdStr, source }).exec();
-  return found;
+PostSchema.statics.removeByUserIdStr = async function removeByUserIdStr(userIdStr, userId) {
+  const post = await PostDAO.findOne({ "user.id_str": userIdStr });
+  if (!post) {
+    throw new Error("Post does not exist");
+  }
+  return await PostDAO.delete({ "user.id_str": userIdStr }, userId);
 };
 
 PostSchema.statics.removeById = async function removeById(_id, userId = null) {
-  const deleteResults = await PostDAO.delete({ _id }, userId);
-  return deleteResults;
+  const post = await PostDAO.findOne({ _id });
+  if (!post) {
+    throw new Error("Post does not exist");
+  }
+  return await PostDAO.delete({ _id }, userId);
 };
 
 PostSchema.statics.removeByManifestationId = async function removeByManifestationId(
@@ -78,7 +77,20 @@ PostSchema.statics.removeByManifestationId = async function removeByManifestatio
   _id,
   userId = null,
 ) {
+  const post = await PostDAO.findOne({ _id, manifestation_id: manifestationId });
+  if (!post) {
+    throw new Error("Post does not exist");
+  }
   return await PostDAO.delete({ _id, manifestation_id: manifestationId }, userId);
+};
+
+PostSchema.statics.countUsersByManifestationId = async function countUsersByManifestationId(
+  manifestationId,
+) {
+  const peopleCount = await PostDAO.distinct("user.id_str", {
+    manifestation_id: manifestationId,
+  }).exec();
+  return peopleCount.length;
 };
 
 PostSchema.plugin(mongooseDelete, {
