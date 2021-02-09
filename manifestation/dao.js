@@ -20,13 +20,12 @@ ManifestationSchema.statics.udpate = async function udpate(_id, manifestation) {
   }).exec();
 };
 
-ManifestationSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
+ManifestationSchema.statics.getAll = async function getAll(query) {
   const manifestationsTotal = await ManifestationDAO.countDocuments({ deleted: false });
-  const manifestations = await ManifestationDAO.find({ ...query })
-    .skip(skip)
-    .limit(limit)
-    .sort(sort);
-
+  const manifestations = await ManifestationDAO.find(query.filter)
+    .skip(query.skip)
+    .limit(query.limit)
+    .sort(query.sort);
   return {
     count: manifestations.length,
     list: manifestations,
