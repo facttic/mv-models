@@ -32,10 +32,8 @@ describe("denylist", () => {
     });
 
     it("will return an empty list if there are no documents", async () => {
-      await expect(DenyListDAO.getAll({}))
-        .to.eventually.be.an("object")
-        .that.has.property("list")
-        .which.has.lengthOf(0);
+      await expect(DenyListDAO.getAll({})).to.eventually.be.an("object").that.has.property("list")
+        .which.is.empty;
     });
 
     it("will return every document associated to the manifestation_id", async () => {
@@ -62,8 +60,7 @@ describe("denylist", () => {
 
       await expect(DenyListDAO.getAllByManifestationId(manifestation1._id, {}))
         .to.eventually.be.an("object")
-        .that.has.property("list")
-        .which.has.lengthOf(0);
+        .that.has.property("list").which.is.empty;
     });
 
     it("will retrieve a denyList by id", async () => {

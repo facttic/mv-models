@@ -35,8 +35,7 @@ describe("manifestation", () => {
     it("will return an empty list if there are no documents", async () => {
       await expect(ManifestationDAO.getAll({}))
         .to.eventually.be.an("object")
-        .that.has.property("list")
-        .which.has.lengthOf(0);
+        .that.has.property("list").which.is.empty;
     });
 
     it("will retrieve a manifestation by id", async () => {
@@ -252,10 +251,8 @@ describe("manifestation", () => {
     it("will return an empty list if there are no hashtags", async () => {
       const manifestation = await factory.create("manifestation", { hashtags: [] });
 
-      expect(manifestation.getAllHashtags())
-        .to.be.an("object")
-        .that.has.property("list")
-        .which.has.lengthOf(0);
+      expect(manifestation.getAllHashtags()).to.be.an("object").that.has.property("list").which.is
+        .empty;
     });
 
     it("will return every hashtag filtered by source", async () => {
@@ -280,8 +277,7 @@ describe("manifestation", () => {
 
       expect(manifestation.getHashtagsBySource("instagram"))
         .to.be.an("object")
-        .that.has.property("list")
-        .which.has.lengthOf(0);
+        .that.has.property("list").which.is.empty;
     });
 
     it("will delete a hashtag by _id", async () => {

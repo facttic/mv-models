@@ -46,25 +46,19 @@ describe("post", () => {
     });
 
     it("will insert nothing with an empty array", async () => {
-      await expect(PostDAO.createMany([])).to.eventually.be.an("Array").which.has.lengthOf(0);
+      await expect(PostDAO.createMany([])).to.eventually.be.an("Array").which.is.empty;
 
-      await expect(PostDAO.getAll({}))
-        .to.eventually.be.an("object")
-        .that.has.property("list")
-        .which.has.lengthOf(0);
+      await expect(PostDAO.getAll({})).to.eventually.be.an("object").that.has.property("list").which
+        .is.empty;
     });
 
     it("will insert nothing if all bodies are invalid", async () => {
       const invalidPosts = await factory.buildMany("post", 7, { post_id_str: null });
 
-      await expect(PostDAO.createMany(invalidPosts))
-        .to.eventually.be.an("Array")
-        .which.has.lengthOf(0);
+      await expect(PostDAO.createMany(invalidPosts)).to.eventually.be.an("Array").which.is.empty;
 
-      await expect(PostDAO.getAll({}))
-        .to.eventually.be.an("object")
-        .that.has.property("list")
-        .which.has.lengthOf(0);
+      await expect(PostDAO.getAll({})).to.eventually.be.an("object").that.has.property("list").which
+        .is.empty;
     });
   });
 
@@ -78,10 +72,8 @@ describe("post", () => {
     });
 
     it("will return an empty list if there are no documents", async () => {
-      await expect(PostDAO.getAll({}))
-        .to.eventually.be.an("object")
-        .that.has.property("list")
-        .which.has.lengthOf(0);
+      await expect(PostDAO.getAll({})).to.eventually.be.an("object").that.has.property("list").which
+        .is.empty;
     });
 
     it("will return every document associated to the manifestation_id", async () => {
@@ -108,8 +100,7 @@ describe("post", () => {
 
       await expect(PostDAO.getAllByManifestationId(manifestation1._id, {}))
         .to.eventually.be.an("object")
-        .that.has.property("list")
-        .which.has.lengthOf(0);
+        .that.has.property("list").which.is.empty;
     });
 
     it("will retrieve a post by id", async () => {
