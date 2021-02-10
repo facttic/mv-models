@@ -88,6 +88,7 @@ const ManifestationSchema = mongoose.Schema(
   {
     collection: "manifestation",
     timestamps: true,
+    versionKey: false,
   },
 );
 

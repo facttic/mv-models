@@ -46,6 +46,14 @@ describe("manifestation", () => {
         .which.equals(manifestation.name);
     });
 
+    it("will replace _id by id when converting to JSON", async () => {
+      const manifestation = await factory.create("manifestation");
+      const manifestationFetched = await ManifestationDAO.getById(manifestation._id);
+
+      expect(manifestationFetched.toJSON()).to.have.property("id");
+      expect(manifestationFetched.toJSON()).to.not.have.property("_id");
+    });
+
     it("will return null when attempting to find an unexistent manifestation by id", async () => {
       const objectId = new Types.ObjectId();
       await expect(ManifestationDAO.getById(objectId)).to.eventually.equal(null);

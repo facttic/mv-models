@@ -111,6 +111,14 @@ describe("post", () => {
         .which.equals(post.post_id_str);
     });
 
+    it("will replace _id by id when converting to JSON", async () => {
+      const post = await factory.create("post");
+      const postFetched = await PostDAO.getById(post._id);
+
+      expect(postFetched.toJSON()).to.have.property("id");
+      expect(postFetched.toJSON()).to.not.have.property("_id");
+    });
+
     it("will retrieve a post by postIdStr and source", async () => {
       const post = await factory.create("post");
 

@@ -72,6 +72,13 @@ DenyListSchema.plugin(mongooseDelete, {
   indexFields: ["deleted"],
 });
 
+DenyListSchema.set("toJSON", {
+  transform: function (_doc, ret) {
+    ret.id = ret._id;
+    delete ret._id;
+  },
+});
+
 const DenyListDAO = mongoose.model("DenyList", DenyListSchema);
 
 module.exports = { DenyListDAO };

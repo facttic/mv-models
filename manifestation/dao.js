@@ -114,19 +114,18 @@ ManifestationSchema.methods.updateHashtag = async function updateHashtag(_id, ha
   return await this.save();
 };
 
-ManifestationSchema.set("toJSON", {
-  transform: function (doc, ret, options) {
-    ret.id = ret._id;
-    delete ret._id;
-    delete ret.__v;
-  },
-});
-
 ManifestationSchema.plugin(mongooseDelete, {
   deletedAt: true,
   deletedBy: true,
   overrideMethods: true,
   indexFields: ["deleted"],
+});
+
+ManifestationSchema.set("toJSON", {
+  transform: function (_doc, ret) {
+    ret.id = ret._id;
+    delete ret._id;
+  },
 });
 
 const ManifestationDAO = mongoose.model("Manifestation", ManifestationSchema);

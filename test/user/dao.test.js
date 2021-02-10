@@ -60,9 +60,15 @@ describe("user", () => {
       const user = await factory.create("user");
       const userFetched = await UserDAO.getById(user._id);
 
-      console.log(userFetched.toJSON());
-
       expect(userFetched.toJSON()).to.not.have.property("password");
+    });
+
+    it("will replace _id by id when converting to JSON", async () => {
+      const user = await factory.create("user");
+      const userFetched = await UserDAO.getById(user._id);
+
+      expect(userFetched.toJSON()).to.have.property("id");
+      expect(userFetched.toJSON()).to.not.have.property("_id");
     });
 
     it("will return a user by its credentials", async () => {

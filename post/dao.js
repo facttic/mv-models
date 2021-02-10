@@ -100,6 +100,13 @@ PostSchema.plugin(mongooseDelete, {
   indexFields: ["deleted"],
 });
 
+PostSchema.set("toJSON", {
+  transform: function (_doc, ret) {
+    ret.id = ret._id;
+    delete ret._id;
+  },
+});
+
 const PostDAO = mongoose.model("Post", PostSchema);
 
 module.exports = { PostDAO };

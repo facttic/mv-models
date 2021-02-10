@@ -20,13 +20,13 @@ UserSchema.statics.udpate = async function udpate(_id, user) {
 };
 
 // TODO: dedupe #59 https://github.com/facttic/mv-issues/issues/67
-UserSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
-  const users = await UserSchema.find({ ...query })
-    .skip(skip)
-    .limit(limit)
-    .sort(sort);
-  return users;
-};
+// UserSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
+//   const users = await UserSchema.find({ ...query })
+//     .skip(skip)
+//     .limit(limit)
+//     .sort(sort);
+//   return users;
+// };
 
 UserSchema.statics.getById = async function getById(_id) {
   return await UserDAO.findOne({ _id }).exec();
@@ -84,12 +84,10 @@ UserSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
-// TODO: https://github.com/facttic/mv-issues/issues/59
 UserSchema.set("toJSON", {
-  transform: function (doc, ret, options) {
+  transform: function (_doc, ret) {
     ret.id = ret._id;
     delete ret._id;
-    delete ret.__v;
     delete ret.tokens;
     delete ret.password;
     delete ret.deleted;

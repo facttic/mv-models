@@ -71,6 +71,14 @@ describe("denylist", () => {
         .which.equals(denyList.user_id_str);
     });
 
+    it("will replace _id by id when converting to JSON", async () => {
+      const denyList = await factory.create("deny_list");
+      const denyListFetched = await DenyListDAO.getById(denyList._id);
+
+      expect(denyListFetched.toJSON()).to.have.property("id");
+      expect(denyListFetched.toJSON()).to.not.have.property("_id");
+    });
+
     it("will return null when attempting to find an unexistent deny_list by id", async () => {
       const objectId = new Types.ObjectId();
       await expect(DenyListDAO.getById(objectId)).to.eventually.equal(null);
