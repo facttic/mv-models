@@ -14,7 +14,7 @@ const UserSchema = mongoose.Schema(
           throw new Error("Invalid Email address");
         }
         const user = this.constructor.findByEmail && (await this.constructor.findByEmail(value));
-        if (user) {
+        if (user && this._id.toString() !== user._id.toString()) {
           throw new Error("Email is in use");
         }
       },

@@ -26,6 +26,12 @@ describe("user", () => {
       await expect(UserDAO.createNew(invalidUser)).to.be.rejectedWith("User validation failed");
       await expect(UserDAO.getById(invalidUser._id)).to.eventually.equal(null);
     });
+
+    it("will throw if the email in the creation body is invalid", async () => {
+      const invalidUser = await factory.build("user", { email: "mimail.net" });
+      await expect(UserDAO.createNew(invalidUser)).to.be.rejectedWith("Invalid Email address");
+      await expect(UserDAO.getById(invalidUser._id)).to.eventually.equal(null);
+    });
   });
 
   context("obtain", () => {
@@ -48,6 +54,40 @@ describe("user", () => {
         .to.eventually.be.an("object")
         .that.has.property("name")
         .which.equals(user.name);
+    });
+
+    it("will return object which contains no password when converting to json", async () => {
+      const user = await factory.create("user");
+      const userFetched = await UserDAO.getById(user._id);
+
+      console.log(userFetched.toJSON());
+
+      expect(userFetched.toJSON()).to.not.have.property("password");
+    });
+
+    it("will return a user by its credentials", async () => {
+      const user = await factory.create("user", { password: "holahola" });
+
+      await expect(UserDAO.findByCredentials(user.email, "holahola"))
+        .to.eventually.be.an("object")
+        .that.has.property("name")
+        .which.equals(user.name);
+    });
+
+    it("will throw if the email doesnt exist", async () => {
+      await factory.create("user", { password: "holahola" });
+
+      await expect(UserDAO.findByCredentials("imnothere@here.net", "holahola")).to.be.rejectedWith(
+        "Invalid login credentials",
+      );
+    });
+
+    it("will throw if password doesnt match", async () => {
+      const user = await factory.create("user", { password: "holahola" });
+
+      await expect(UserDAO.findByCredentials(user.email, "holachau")).to.be.rejectedWith(
+        "Invalid login credentials",
+      );
     });
   });
 
@@ -77,15 +117,32 @@ describe("user", () => {
       );
     });
   });
+
   context("remove", () => {
     beforeEach(async function () {
       this.user = await factory.create("user");
     });
+
     it("will delete a user by id", async function () {
       await expect(UserDAO.removeById(this.user._id))
         .to.eventually.be.an("object")
         .that.has.property("ok")
         .which.equals(1);
+    });
+  });
+
+  context("token", () => {
+    it("will create and add a new token for the user", async () => {
+      const user = await factory.create("user");
+      const tokensLength = user.tokens.length;
+      const token = await user.generateAuthToken();
+
+      await expect(UserDAO.getById(user._id))
+        .to.eventually.be.an("object")
+        .that.has.property("tokens")
+        .which.has.lengthOf(tokensLength + 1)
+        .and.nested.property(`[${tokensLength}].token`)
+        .which.equals(token);
     });
   });
 });

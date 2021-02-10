@@ -19,6 +19,7 @@ UserSchema.statics.udpate = async function udpate(_id, user) {
   }).exec();
 };
 
+// TODO: dedupe #59 https://github.com/facttic/mv-issues/issues/67
 UserSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
   const users = await UserSchema.find({ ...query })
     .skip(skip)
@@ -44,11 +45,11 @@ UserSchema.statics.findByCredentials = async (email, password) => {
   // Search for a user by email and password.
   const user = await UserDAO.findOne({ email });
   if (!user) {
-    throw new Error({ error: "Invalid login credentials" });
+    throw new Error("Invalid login credentials");
   }
   const isPasswordMatch = await bcrypt.compare(password, user.password);
   if (!isPasswordMatch) {
-    throw new Error({ error: "Invalid login credentials" });
+    throw new Error("Invalid login credentials");
   }
   // let cleanUser = user.toObject();
   // delete cleanUser.password;
@@ -77,15 +78,13 @@ UserSchema.pre("save", async function (next) {
 
 UserSchema.methods.generateAuthToken = async function () {
   // Generate an auth token for the user
-  const user = this;
-  const token = jwt.sign({ _id: user._id }, process.env.API_JWT_KEY);
-  user.tokens = user.tokens.concat({ token });
-  await UserDAO.findByIdAndUpdate({ _id: user._id }, user, {
-    runValidators: true,
-  }).exec();
+  const token = jwt.sign({ _id: this._id }, process.env.API_JWT_KEY || "defaultkey");
+  this.tokens && this.tokens.push({ token });
+  await this.save();
   return token;
 };
 
+// TODO: https://github.com/facttic/mv-issues/issues/59
 UserSchema.set("toJSON", {
   transform: function (doc, ret, options) {
     ret.id = ret._id;
