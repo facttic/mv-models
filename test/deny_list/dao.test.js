@@ -20,6 +20,12 @@ describe("denylist", () => {
       );
       await expect(DenyListDAO.getById(invalidDenyList._id)).to.eventually.equal(null);
     });
+
+    it("will throw if creation body include unexistent fields", async () => {
+      const invalidDenyList = await factory.attrs("deny_list", { foo: "bar" });
+      await expect(DenyListDAO.createNew(invalidDenyList)).to.be.rejectedWith("not in schema");
+      await expect(DenyListDAO.getById(invalidDenyList._id)).to.eventually.equal(null);
+    });
   });
 
   context("get", () => {

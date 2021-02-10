@@ -16,8 +16,8 @@ describe("user", () => {
 
     it("cannot create user with an existent email", async () => {
       const user = await factory.create("user");
-      const userToAdd = await factory.build("user", { email: user.email });
-      delete userToAdd._doc._id;
+      const userToAdd = await factory.attrs("user", { email: user.email });
+
       await expect(UserDAO.createNew(userToAdd)).to.be.rejectedWith("Email is in use");
     });
 
@@ -31,6 +31,13 @@ describe("user", () => {
       const invalidUser = await factory.build("user", { email: "mimail.net" });
       await expect(UserDAO.createNew(invalidUser)).to.be.rejectedWith("Invalid Email address");
       await expect(UserDAO.getById(invalidUser._id)).to.eventually.equal(null);
+    });
+
+    it("will throw if update body include unexistent fields", async () => {
+      const user = await factory.create("user");
+      const invalidUser = await factory.attrs("user", { foo: "bar" });
+
+      await expect(UserDAO.udpate(user._id, invalidUser)).to.be.rejectedWith("not in schema");
     });
   });
 
@@ -103,9 +110,7 @@ describe("user", () => {
     });
 
     it("will update a user by id and return the updated object", async function () {
-      const validuser = await factory.build("user");
-
-      delete validuser._doc._id;
+      const validuser = await factory.attrs("user");
 
       await expect(UserDAO.udpate(this.user._id, validuser))
         .to.eventually.be.an("object")
@@ -114,13 +119,18 @@ describe("user", () => {
     });
 
     it("will throw if update body is invalid", async function () {
-      const invalidUser = await factory.build("user", { name: null });
-
-      delete invalidUser._doc._id;
+      const invalidUser = await factory.attrs("user", { name: null });
 
       await expect(UserDAO.udpate(this.user._id, invalidUser)).to.be.rejectedWith(
         "Validation failed",
       );
+    });
+
+    it("will throw if update body include unexistent fields", async () => {
+      const user = await factory.create("user");
+      const invalidUser = await factory.attrs("user", { foo: "bar" });
+
+      await expect(UserDAO.udpate(user._id, invalidUser)).to.be.rejectedWith("not in schema");
     });
   });
 

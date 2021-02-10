@@ -14,9 +14,9 @@ const HashtagSchema = mongoose.Schema(
     },
   },
   {
-    collection: "hashtag",
     timestamps: true,
     versionKey: false,
+    strict: "throw",
   },
 );
 

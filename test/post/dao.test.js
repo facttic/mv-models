@@ -60,6 +60,12 @@ describe("post", () => {
       await expect(PostDAO.getAll({})).to.eventually.be.an("object").that.has.property("list").which
         .is.empty;
     });
+
+    it("will throw if creation body include unexistent fields", async () => {
+      const invalidPost = await factory.attrs("post", { address: "anything" });
+      await expect(PostDAO.createNew(invalidPost)).to.be.rejectedWith("not in schema");
+      await expect(PostDAO.getById(invalidPost._id)).to.eventually.equal(null);
+    });
   });
 
   context("get", () => {

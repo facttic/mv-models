@@ -45,6 +45,7 @@ const PostSchema = mongoose.Schema(
     collection: "post",
     timestamps: true,
     versionKey: false,
+    strict: "throw",
   },
 );
 

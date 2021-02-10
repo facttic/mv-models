@@ -21,6 +21,14 @@ describe("manifestation", () => {
       );
       await expect(ManifestationDAO.getById(invalidManifestation._id)).to.eventually.equal(null);
     });
+
+    it("will throw if creation body include unexistent fields", async () => {
+      const invalidManifestation = await factory.attrs("manifestation", { address: "anything" });
+      await expect(ManifestationDAO.createNew(invalidManifestation)).to.be.rejectedWith(
+        "not in schema",
+      );
+      await expect(ManifestationDAO.getById(invalidManifestation._id)).to.eventually.equal(null);
+    });
   });
 
   context("get", () => {
@@ -63,10 +71,7 @@ describe("manifestation", () => {
   context("update", () => {
     it("will update a manifestation by id and return the updated object", async () => {
       const manifestation = await factory.create("manifestation");
-      const validManifestation = await factory.build("manifestation");
-
-      // mongoose instance comes with an _id
-      delete validManifestation._doc._id;
+      const validManifestation = await factory.attrs("manifestation");
 
       await expect(ManifestationDAO.udpate(manifestation._id, validManifestation))
         .to.eventually.be.an("object")
@@ -76,20 +81,25 @@ describe("manifestation", () => {
 
     it("will throw if update body is invalid", async () => {
       const manifestation = await factory.create("manifestation");
-      const invalidManifestation = await factory.build("manifestation", { name: null });
-
-      delete invalidManifestation._doc._id;
+      const invalidManifestation = await factory.attrs("manifestation", { name: null });
 
       await expect(
         ManifestationDAO.udpate(manifestation._id, invalidManifestation),
       ).to.be.rejectedWith("Validation failed");
     });
 
+    it("will throw if update body include unexistent fields", async () => {
+      const manifestation = await factory.create("manifestation");
+      const invalidManifestation = await factory.attrs("manifestation", { foo: "bar" });
+
+      await expect(
+        ManifestationDAO.udpate(manifestation._id, invalidManifestation),
+      ).to.be.rejectedWith("not in schema");
+    });
+
     // TODO: check if we need to throw on unexistent
     it("will return null when trying to update an unexistent manifestation", async () => {
-      const validManifestation = await factory.build("manifestation");
-
-      delete validManifestation._doc._id;
+      const validManifestation = await factory.attrs("manifestation");
 
       await expect(
         ManifestationDAO.udpate(new Types.ObjectId(), validManifestation),

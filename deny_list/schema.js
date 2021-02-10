@@ -16,6 +16,7 @@ const DenyListSchema = mongoose.Schema(
     collection: "deny_list",
     timestamps: true,
     versionKey: false,
+    strict: "throw",
   },
 );
 
