@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 const mongooseDelete = require("mongoose-delete");
 
-const { ManifestationSchema } = require("./model");
+const { ManifestationSchema } = require("./schema");
 const { PostDAO } = require("../post/dao");
 
 const _ = require("lodash");

@@ -4,7 +4,7 @@ const mongooseDelete = require("mongoose-delete");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const { UserSchema } = require("./model");
+const { UserSchema } = require("./schema");
 
 UserSchema.statics.createNew = async function createNew(user) {
   const _user = new UserDAO(user);

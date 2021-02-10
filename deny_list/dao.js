@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 const mongooseDelete = require("mongoose-delete");
 
-const { DenyListSchema } = require("./model");
+const { DenyListSchema } = require("./schema");
 
 DenyListSchema.statics.createNew = async function createNew(denyList) {
   return await DenyListDAO.create(denyList);

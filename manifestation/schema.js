@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { HashtagSchema } = require("../hashtag/model");
+const { HashtagSchema } = require("../hashtag/schema");
 
 const ManifestationSchema = mongoose.Schema(
   {

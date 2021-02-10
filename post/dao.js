@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 const mongooseDelete = require("mongoose-delete");
 
-const { PostSchema } = require("./model");
+const { PostSchema } = require("./schema");
 
 PostSchema.statics.createNew = async function createNew(post) {
   return await PostDAO.create(post);
