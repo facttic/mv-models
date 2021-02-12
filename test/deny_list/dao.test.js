@@ -92,17 +92,19 @@ describe("denylist", () => {
   });
 
   context("delete", () => {
-    it("will delete a document by id", async () => {
-      const denyList = await factory.create("deny_list");
-
-      await expect(DenyListDAO.removeById(denyList._id)).to.be.fulfilled;
-      await expect(DenyListDAO.getById(denyList._id)).to.eventually.equal(null);
-    });
-
-    it("will fail to delete a document by an unexistent id", async () => {
+    it("will delete a document by id and return that id on success", async () => {
       const objectId = new Types.ObjectId();
 
-      await expect(DenyListDAO.removeById(objectId)).to.be.rejectedWith("Denylist does not exist");
+      const { _id } = await factory.create("deny_list");
+
+      await expect(DenyListDAO.removeById(_id, objectId)).to.eventually.equal(_id);
+      await expect(DenyListDAO.getById(_id)).to.eventually.equal(null);
+    });
+
+    it("will return null when deleting a document by an unexistent id", async () => {
+      const objectId = new Types.ObjectId();
+
+      await expect(DenyListDAO.removeById(objectId)).to.eventually.equal(null);
     });
   });
 

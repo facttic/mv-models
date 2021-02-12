@@ -9,11 +9,12 @@ DenyListSchema.statics.createNew = async function createNew(denyList) {
 };
 
 DenyListSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
-  const denyListsCount = await DenyListDAO.countDocuments({});
+  const denyListsCount = await DenyListDAO.countDocuments({}).exec();
   const denyLists = await DenyListDAO.find({ ...query })
     .skip(skip)
     .limit(limit)
-    .sort(sort);
+    .sort(sort)
+    .exec();
 
   return {
     count: denyLists.length,
@@ -26,11 +27,12 @@ DenyListSchema.statics.getAllByManifestationId = async function getAllByManifest
   manifestationId,
   { skip, limit, sort, query },
 ) {
-  const denyListsCount = await DenyListDAO.countDocuments({});
+  const denyListsCount = await DenyListDAO.countDocuments({}).exec();
   const denyLists = await DenyListDAO.find({ manifestation_id: manifestationId, ...query })
     .skip(skip)
     .limit(limit)
-    .sort(sort);
+    .sort(sort)
+    .exec();
 
   return {
     count: denyLists.length,
@@ -39,12 +41,16 @@ DenyListSchema.statics.getAllByManifestationId = async function getAllByManifest
   };
 };
 
+DenyListSchema.statics.getDeletedById = async function getById(_id) {
+  return await DenyListDAO.findOneDeleted({ _id }).exec();
+};
+
 DenyListSchema.statics.getById = async function getById(_id) {
-  return await DenyListDAO.findOne({ _id });
+  return await DenyListDAO.findById(_id).exec();
 };
 
 DenyListSchema.statics.getByUserIdStr = async function getByUserIdStr(userIdStr) {
-  return await DenyListDAO.findOne({ user_id_str: userIdStr });
+  return await DenyListDAO.findOne({ user_id_str: userIdStr }).exec();
 };
 
 DenyListSchema.statics.getByUserIdStrByManifestationId = async function getByUserIdStrByManifestationId(
@@ -54,15 +60,16 @@ DenyListSchema.statics.getByUserIdStrByManifestationId = async function getByUse
   return await DenyListDAO.findOne({
     manifestation_id: manifestationId,
     user_id_str: userIdStr,
-  });
+  }).exec();
 };
 
 DenyListSchema.statics.removeById = async function removeById(_id, userId = null) {
-  const denyList = await DenyListDAO.findOne({ _id });
-  if (!denyList) {
-    throw new Error("Denylist does not exist");
+  const { nModified } = await DenyListDAO.deleteById(_id, userId).exec();
+  // nModified will be 1 when _id exists
+  if (nModified) {
+    return _id;
   }
-  return await DenyListDAO.delete({ _id }, userId);
+  return null;
 };
 
 DenyListSchema.plugin(mongooseDelete, {
