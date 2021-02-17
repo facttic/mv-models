@@ -34,11 +34,16 @@ ManifestationSchema.statics.getAll = async function getAll({ skip, limit, sort, 
 };
 
 ManifestationSchema.statics.getById = async function getById(_id) {
-  return await ManifestationDAO.findOne({ _id }).exec();
+  return await ManifestationDAO.findById(_id).exec();
 };
 
 ManifestationSchema.statics.removeById = async function removeById(_id, userId = null) {
-  return await ManifestationDAO.delete({ _id }, userId);
+  const { nModified } = await ManifestationDAO.deleteById(_id, userId).exec();
+  // nModified will be 1 when _id exists
+  if (nModified) {
+    return _id;
+  }
+  return null;
 };
 
 // Instance methods
@@ -52,7 +57,7 @@ ManifestationSchema.methods.newCrawlStatus = async function newCrawlStatus(postC
   return await this.save();
 };
 
-ManifestationSchema.methods.getLastCrawlStatus = function getLastCrawlStatusByHashtag(source) {
+ManifestationSchema.methods.getLastCrawlStatus = function getLastCrawlStatus(source) {
   return _.chain(this.get("crawlStatuses"))
     .filter({ source })
     .orderBy("_id", "desc")
@@ -97,21 +102,23 @@ ManifestationSchema.methods.getHashtagsBySource = function getHashtagsBySource(s
 ManifestationSchema.methods.deleteHashtag = async function deleteHashtag(_id) {
   const existingHashtag = this.hashtags.id(_id);
   if (!existingHashtag) {
-    throw new Error("Hashtag does not exist");
+    return null;
   }
 
   existingHashtag.remove();
-  return await this.save();
+  await this.save();
+  return _id;
 };
 
 ManifestationSchema.methods.updateHashtag = async function updateHashtag(_id, hashtag) {
   const existingHashtag = this.hashtags.id(_id);
   if (!existingHashtag) {
-    throw new Error("Hashtag does not exist");
+    return null;
   }
 
   Object.assign(existingHashtag, hashtag);
-  return await this.save();
+  await this.save();
+  return existingHashtag;
 };
 
 ManifestationSchema.plugin(mongooseDelete, {

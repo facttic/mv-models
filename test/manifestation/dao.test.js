@@ -114,6 +114,12 @@ describe("manifestation", () => {
       await expect(ManifestationDAO.removeById(manifestation._id)).to.be.fulfilled;
       await expect(ManifestationDAO.getById(manifestation._id)).to.eventually.equal(null);
     });
+
+    it("will return null when deleting a document by an unexistent id", async () => {
+      const objectId = new Types.ObjectId();
+
+      await expect(ManifestationDAO.removeById(objectId)).to.eventually.equal(null);
+    });
   });
 
   context("people", () => {
@@ -300,32 +306,27 @@ describe("manifestation", () => {
 
     it("will delete a hashtag by _id", async () => {
       const manifestation = await factory.create("manifestation");
-      const initialLength = manifestation.get("hashtags").length;
       const _id = manifestation.get("hashtags")[0]._id;
 
-      await expect(manifestation.deleteHashtag(_id))
-        .to.eventually.be.an("object")
-        .that.has.property("hashtags")
-        .which.has.lengthOf(initialLength - 1);
+      await expect(manifestation.deleteHashtag(_id)).to.eventually.equal(_id);
     });
 
-    it("will fail to delete a hashtag with an unexistent _id", async () => {
+    it("will return null when deleting a hashtag with an unexistent _id", async () => {
       const manifestation = await factory.create("manifestation");
       const _id = Types.ObjectId();
 
-      await expect(manifestation.deleteHashtag(_id)).to.be.rejectedWith("Hashtag does not exist");
+      await expect(manifestation.deleteHashtag(_id)).to.eventually.equal(null);
     });
 
     it("will update a hashtag by _id", async () => {
       const manifestation = await factory.create("manifestation");
-      const initialLength = manifestation.get("hashtags").length;
       const _id = manifestation.get("hashtags")[0]._id;
       const hashtag = buildHashtag();
 
       await expect(manifestation.updateHashtag(_id, hashtag))
         .to.eventually.be.an("object")
-        .that.has.property("hashtags")
-        .which.has.lengthOf(initialLength);
+        .that.has.property("_id")
+        .which.equals(_id);
 
       expect(manifestation.get("hashtags")[0].name).to.be.equal(hashtag.name);
     });
@@ -340,14 +341,12 @@ describe("manifestation", () => {
       );
     });
 
-    it("will fail to update a hashtag with an unexistent _id", async () => {
+    it("will return null when updating a hashtag with an unexistent _id", async () => {
       const manifestation = await factory.create("manifestation");
       const hashtag = buildHashtag();
       const _id = Types.ObjectId();
 
-      await expect(manifestation.updateHashtag(_id, hashtag)).to.be.rejectedWith(
-        "Hashtag does not exist",
-      );
+      await expect(manifestation.updateHashtag(_id, hashtag)).to.eventually.equal(null);
     });
   });
 });
