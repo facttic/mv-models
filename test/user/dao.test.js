@@ -142,6 +142,10 @@ describe("user", () => {
     it("will delete a user by id", async function () {
       await expect(UserDAO.removeById(this.user._id)).to.eventually.equal(this.user._id);
     });
+
+    it("will return null when delete a user by unexistent id", async function () {
+      await expect(UserDAO.removeById(new Types.ObjectId())).to.eventually.equal(null);
+    });
   });
 
   context("token", () => {

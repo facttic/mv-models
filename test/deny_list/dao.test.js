@@ -77,6 +77,18 @@ describe("denylist", () => {
         .which.equals(denyList.user_id_str);
     });
 
+    it("will retrieve a deleted denyList by id", async () => {
+      const objectId = new Types.ObjectId();
+
+      const { _id } = await factory.create("deny_list");
+
+      await expect(DenyListDAO.removeById(_id, objectId)).to.eventually.equal(_id);
+      await expect(DenyListDAO.getDeletedById(_id))
+        .to.eventually.be.an("object")
+        .that.has.property("deleted")
+        .which.equals(true);
+    });
+
     it("will replace _id by id when converting to JSON", async () => {
       const denyList = await factory.create("deny_list");
       const denyListFetched = await DenyListDAO.getById(denyList._id);
