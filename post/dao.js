@@ -13,12 +13,13 @@ PostSchema.statics.createMany = async function createMany(posts) {
 };
 
 PostSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
-  const postsTotal = await PostDAO.countDocuments({});
+  const postsTotal = await PostDAO.countDocuments({}).exec();
 
   const posts = await PostDAO.find({ ...query })
     .skip(skip)
     .limit(limit)
-    .sort(sort);
+    .sort(sort)
+    .exec();
 
   return {
     count: posts.length,
@@ -31,12 +32,13 @@ PostSchema.statics.getAllByManifestationId = async function getAllByManifestatio
   manifestationId,
   { skip, limit, sort, query },
 ) {
-  const postsTotal = await PostDAO.countDocuments({ manifestation_id: manifestationId });
+  const postsTotal = await PostDAO.countDocuments({ manifestation_id: manifestationId }).exec();
 
   const posts = await PostDAO.find({ ...query, manifestation_id: manifestationId })
     .skip(skip)
     .limit(limit)
-    .sort(sort);
+    .sort(sort)
+    .exec();
 
   return {
     count: posts.length,
@@ -53,35 +55,38 @@ PostSchema.statics.getByPostIdStrBySource = async function getByPostIdStrBySourc
 };
 
 PostSchema.statics.getById = async function getById(_id) {
-  return await PostDAO.findOne({ _id });
+  return await PostDAO.findById(_id).exec();
 };
 
-PostSchema.statics.removeByUserIdStr = async function removeByUserIdStr(userIdStr, userId) {
-  const post = await PostDAO.findOne({ "user.id_str": userIdStr });
-  if (!post) {
-    throw new Error("Post does not exist");
+PostSchema.statics.removeByUserIdStr = async function removeByUserIdStr(userIdStr, userId = null) {
+  const { nModified } = await PostDAO.delete({ "user.id_str": userIdStr }, userId);
+
+  if (nModified) {
+    return userIdStr;
   }
-  return await PostDAO.delete({ "user.id_str": userIdStr }, userId);
+  return null;
 };
 
 PostSchema.statics.removeById = async function removeById(_id, userId = null) {
-  const post = await PostDAO.findOne({ _id });
-  if (!post) {
-    throw new Error("Post does not exist");
+  const { nModified } = await PostDAO.deleteById(_id, userId);
+
+  if (nModified) {
+    return _id;
   }
-  return await PostDAO.delete({ _id }, userId);
+  return null;
 };
 
-PostSchema.statics.removeByManifestationId = async function removeByManifestationId(
+PostSchema.statics.removeByIdByManifestationId = async function removeByIdByManifestationId(
   manifestationId,
   _id,
   userId = null,
 ) {
-  const post = await PostDAO.findOne({ _id, manifestation_id: manifestationId });
-  if (!post) {
-    throw new Error("Post does not exist");
+  const { nModified } = await PostDAO.delete({ _id, manifestation_id: manifestationId }, userId);
+
+  if (nModified) {
+    return _id;
   }
-  return await PostDAO.delete({ _id, manifestation_id: manifestationId }, userId);
+  return null;
 };
 
 PostSchema.statics.countUsersByManifestationId = async function countUsersByManifestationId(
@@ -90,6 +95,7 @@ PostSchema.statics.countUsersByManifestationId = async function countUsersByMani
   const peopleCount = await PostDAO.distinct("user.id_str", {
     manifestation_id: manifestationId,
   }).exec();
+
   return peopleCount.length;
 };
 

@@ -159,7 +159,7 @@ describe("post", () => {
     it("will delete a document by id and manifestationId", async () => {
       const post = await factory.create("post");
 
-      await expect(PostDAO.removeByManifestationId(post.manifestation_id, post._id)).to.be
+      await expect(PostDAO.removeByIdByManifestationId(post.manifestation_id, post._id)).to.be
         .fulfilled;
       await expect(PostDAO.getById(post._id)).to.eventually.equal(null);
     });
@@ -168,15 +168,13 @@ describe("post", () => {
       const post = await factory.create("post");
       const objectId = new Types.ObjectId();
 
-      await expect(PostDAO.removeByManifestationId(objectId, post._id)).to.be.rejectedWith(
-        "Post does not exist",
-      );
+      await expect(PostDAO.removeByIdByManifestationId(objectId, post._id)).to.eventually.equal(null);
     });
 
     it("will fail to delete a document by an unexistent id", async () => {
       const objectId = new Types.ObjectId();
 
-      await expect(PostDAO.removeById(objectId)).to.be.rejectedWith("Post does not exist");
+      await expect(PostDAO.removeById(objectId)).to.eventually.equal(null);
     });
 
     it("will delete a document by userIdStr", async () => {
@@ -189,7 +187,7 @@ describe("post", () => {
     it("will fail to delete a document by an unexistent userIdStr", async () => {
       const objectId = new Types.ObjectId();
 
-      await expect(PostDAO.removeByUserIdStr(objectId)).to.be.rejectedWith("Post does not exist");
+      await expect(PostDAO.removeByUserIdStr(objectId)).to.eventually.equal(null);
     });
   });
 
