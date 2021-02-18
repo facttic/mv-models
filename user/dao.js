@@ -19,15 +19,6 @@ UserSchema.statics.udpate = async function udpate(_id, user) {
   }).exec();
 };
 
-// TODO: dedupe #59 https://github.com/facttic/mv-issues/issues/67
-// UserSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
-//   const users = await UserSchema.find({ ...query })
-//     .skip(skip)
-//     .limit(limit)
-//     .sort(sort);
-//   return users;
-// };
-
 UserSchema.statics.getById = async function getById(_id) {
   return await UserDAO.findOne({ _id }).exec();
 };
@@ -56,11 +47,11 @@ UserSchema.statics.findByCredentials = async (email, password) => {
   return user;
 };
 
-UserSchema.statics.getAll = async function getAll(query) {
-  const skip = parseInt(query.skip);
-  const limit = parseInt(query.limit);
-  const filter = query.filter === undefined ? {} : JSON.parse(query.filter);
-  const users = await UserDAO.find(filter).skip(skip).limit(limit).sort(query.sort);
+UserSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
+  const users = await UserDAO.find({ ...query })
+    .skip(skip)
+    .limit(limit)
+    .sort(sort);
   for (let i = 0; i < users.length; i++) {
     delete users[i]._doc.tokens;
   }
