@@ -65,6 +65,7 @@ DenyListSchema.statics.getByUserIdStrByManifestationId = async function getByUse
 
 DenyListSchema.statics.removeById = async function removeById(_id, userId = null) {
   const { nModified } = await DenyListDAO.deleteById(_id, userId).exec();
+
   // nModified will be 1 when _id exists
   if (nModified) {
     return _id;

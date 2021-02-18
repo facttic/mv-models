@@ -14,18 +14,20 @@ ManifestationSchema.statics.createNew = async function createNew(manifestation) 
 
 // TODO: googlear y revisar como mergear las propiedades del objeto existente
 ManifestationSchema.statics.udpate = async function udpate(_id, manifestation) {
-  return await ManifestationDAO.findByIdAndUpdate({ _id }, manifestation, {
+  return await ManifestationDAO.findByIdAndUpdate(_id, manifestation, {
     new: true,
     runValidators: true,
   }).exec();
 };
 
 ManifestationSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) {
-  const manifestationsTotal = await ManifestationDAO.countDocuments({ deleted: false });
+  const manifestationsTotal = await ManifestationDAO.countDocuments({ deleted: false }).exec();
   const manifestations = await ManifestationDAO.find({ ...query })
     .skip(skip)
     .limit(limit)
-    .sort(sort);
+    .sort(sort)
+    .exec();
+
   return {
     count: manifestations.length,
     list: manifestations,
@@ -39,6 +41,7 @@ ManifestationSchema.statics.getById = async function getById(_id) {
 
 ManifestationSchema.statics.removeById = async function removeById(_id, userId = null) {
   const { nModified } = await ManifestationDAO.deleteById(_id, userId).exec();
+
   // nModified will be 1 when _id exists
   if (nModified) {
     return _id;

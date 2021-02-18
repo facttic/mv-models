@@ -59,7 +59,7 @@ PostSchema.statics.getById = async function getById(_id) {
 };
 
 PostSchema.statics.removeByUserIdStr = async function removeByUserIdStr(userIdStr, userId = null) {
-  const { nModified } = await PostDAO.delete({ "user.id_str": userIdStr }, userId);
+  const { nModified } = await PostDAO.delete({ "user.id_str": userIdStr }, userId).exec();
 
   if (nModified) {
     return userIdStr;
@@ -68,7 +68,7 @@ PostSchema.statics.removeByUserIdStr = async function removeByUserIdStr(userIdSt
 };
 
 PostSchema.statics.removeById = async function removeById(_id, userId = null) {
-  const { nModified } = await PostDAO.deleteById(_id, userId);
+  const { nModified } = await PostDAO.deleteById(_id, userId).exec();
 
   if (nModified) {
     return _id;
@@ -81,7 +81,10 @@ PostSchema.statics.removeByIdByManifestationId = async function removeByIdByMani
   _id,
   userId = null,
 ) {
-  const { nModified } = await PostDAO.delete({ _id, manifestation_id: manifestationId }, userId);
+  const { nModified } = await PostDAO.delete(
+    { _id, manifestation_id: manifestationId },
+    userId,
+  ).exec();
 
   if (nModified) {
     return _id;
