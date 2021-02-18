@@ -140,10 +140,7 @@ describe("user", () => {
     });
 
     it("will delete a user by id", async function () {
-      await expect(UserDAO.removeById(this.user._id))
-        .to.eventually.be.an("object")
-        .that.has.property("ok")
-        .which.equals(1);
+      await expect(UserDAO.removeById(this.user._id)).to.eventually.equal(this.user._id);
     });
   });
 

@@ -7,24 +7,27 @@ const jwt = require("jsonwebtoken");
 const { UserSchema } = require("./schema");
 
 UserSchema.statics.createNew = async function createNew(user) {
-  const _user = new UserDAO(user);
-  const newPost = await _user.save();
-  return newPost;
+  return await UserDAO.create(user);
 };
 
 UserSchema.statics.udpate = async function udpate(_id, user) {
-  return await UserDAO.findByIdAndUpdate({ _id }, user, {
+  return await UserDAO.findByIdAndUpdate(_id, user, {
     new: true,
     runValidators: true,
   }).exec();
 };
 
 UserSchema.statics.getById = async function getById(_id) {
-  return await UserDAO.findOne({ _id }).exec();
+  return await UserDAO.findById(_id).exec();
 };
 
 UserSchema.statics.removeById = async function removeById(_id, userId = null) {
-  return await UserDAO.delete({ _id }, userId);
+  const { nModified } = await UserDAO.deleteById(_id, userId).exec();
+
+  if (nModified) {
+    return _id;
+  }
+  return null;
 };
 
 UserSchema.statics.findByEmail = async (email) => {
@@ -33,17 +36,19 @@ UserSchema.statics.findByEmail = async (email) => {
 };
 
 UserSchema.statics.findByCredentials = async (email, password) => {
-  // Search for a user by email and password.
-  const user = await UserDAO.findOne({ email });
+  // Search for a user by email and compare password.
+  const user = await UserDAO.findByEmail(email);
+
   if (!user) {
     throw new Error("Invalid login credentials");
   }
+
   const isPasswordMatch = await bcrypt.compare(password, user.password);
+
   if (!isPasswordMatch) {
     throw new Error("Invalid login credentials");
   }
-  // let cleanUser = user.toObject();
-  // delete cleanUser.password;
+
   return user;
 };
 
@@ -51,10 +56,15 @@ UserSchema.statics.getAll = async function getAll({ skip, limit, sort, query }) 
   const users = await UserDAO.find({ ...query })
     .skip(skip)
     .limit(limit)
-    .sort(sort);
+    .sort(sort)
+    .exec();
+
+  // don't think this is required
+  // duplicated of line#91
   for (let i = 0; i < users.length; i++) {
     delete users[i]._doc.tokens;
   }
+
   return users;
 };
 
