@@ -48,11 +48,11 @@ module.exports = (factory) => {
       },
     },
     images: {
-      header: chance.url(),
-      favicon: chance.url(),
+      header: { src: chance.url() },
+      favicon: { src: chance.url() },
       og: {
-        twitter: chance.url(),
-        facebook: chance.url(),
+        twitter: { src: chance.url() },
+        facebook: { src: chance.url() },
       },
     },
     startDate: chance.date(),
