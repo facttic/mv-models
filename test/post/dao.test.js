@@ -168,7 +168,9 @@ describe("post", () => {
       const post = await factory.create("post");
       const objectId = new Types.ObjectId();
 
-      await expect(PostDAO.removeByIdByManifestationId(objectId, post._id)).to.eventually.equal(null);
+      await expect(PostDAO.removeByIdByManifestationId(objectId, post._id)).to.eventually.equal(
+        null,
+      );
     });
 
     it("will fail to delete a document by an unexistent id", async () => {
