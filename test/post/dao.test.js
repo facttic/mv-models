@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-expressions */
-const factory = require("../factories");
+const factory = require("../../factories");
 const { PostDAO } = require("../../post/dao");
 const { Types } = require("mongoose");
 

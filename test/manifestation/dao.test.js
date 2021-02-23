@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
-const factory = require("../factories");
-const { buildCrawlStatus, buildHashtag } = require("../factories/manifestation");
+const factory = require("../../factories");
+const { buildCrawlStatus, buildHashtag } = require("../../factories/manifestation");
 const { ManifestationDAO } = require("../../manifestation/dao");
 const { Types } = require("mongoose");
 

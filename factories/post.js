@@ -1,4 +1,4 @@
-const { PostDAO } = require("../../post/dao");
+const { PostDAO } = require("../post/dao");
 const chance = require("chance").Chance();
 
 module.exports = (factory) => {

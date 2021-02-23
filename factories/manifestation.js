@@ -1,4 +1,4 @@
-const { ManifestationDAO } = require("../../manifestation/dao");
+const { ManifestationDAO } = require("../manifestation/dao");
 const chance = require("chance").Chance();
 
 module.exports = (factory) => {

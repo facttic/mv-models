@@ -1,4 +1,4 @@
-const factory = require("../factories");
+const factory = require("../../factories");
 const { UserDAO } = require("../../user/dao");
 const { Types } = require("mongoose");
 

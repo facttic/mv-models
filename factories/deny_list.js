@@ -1,4 +1,4 @@
-const { DenyListDAO } = require("../../deny_list/dao");
+const { DenyListDAO } = require("../deny_list/dao");
 const chance = require("chance").Chance();
 
 module.exports = (factory) => {
