@@ -74,11 +74,19 @@ const ManifestationSchema = mongoose.Schema(
       },
     },
     images: {
-      header: { type: String, trim: true, default: "" },
-      favicon: { type: String, trim: true, default: "" },
+      header: {
+        src: { type: String, trim: true, default: "" },
+      },
+      favicon: {
+        src: { type: String, trim: true, default: "" },
+      },
       og: {
-        twitter: { type: String, trim: true, default: "" },
-        facebook: { type: String, trim: true, default: "" },
+        twitter: {
+          src: { type: String, trim: true, default: "" },
+        },
+        facebook: {
+          src: { type: String, trim: true, default: "" },
+        },
       },
     },
     startDate: { type: Date, default: Date.now },
