@@ -17,6 +17,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "factory-girl": "^5.0.4",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.11",
     "mongoose-delete": "^0.5.3",
@@ -37,7 +38,6 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^5.0.0",
-    "factory-girl": "^5.0.4",
     "mocha": "^8.2.1",
     "mongodb-memory-server-core": "^6.9.3",
     "nodemon": "^2.0.2",
