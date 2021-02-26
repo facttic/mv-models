@@ -33,6 +33,7 @@ const UserSchema = mongoose.Schema(
       index: true,
     },
   },
+  {},
   {
     collection: "user",
     timestamps: true,
