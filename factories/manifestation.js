@@ -3,6 +3,7 @@ const chance = require("chance").Chance();
 
 module.exports = (factory) => {
   factory.define("manifestation", ManifestationDAO, {
+    active: true,
     name: chance.name(),
     uri: chance.url(),
     title: chance.sentence(),
@@ -53,6 +54,33 @@ module.exports = (factory) => {
       og: {
         twitter: { src: chance.url() },
         facebook: { src: chance.url() },
+      },
+    },
+    config: {
+      twitter: {
+        active: false,
+        scheduleSchema: "*/20 * * * *",
+        maxTweets: 1400,
+        maxTweetsPerQuery: 100,
+        api: {
+          consumerKey: chance.word({ length: 20 }),
+          consumerSecret: chance.word({ length: 20 }),
+          accessTokenKey: chance.word({ length: 20 }),
+          accessTokenSecret: chance.word({ length: 20 }),
+        },
+      },
+      instagram: {
+        active: false,
+        scheduleSchema: "*/20 * * * *",
+        maxPosts: 1400,
+        impersonate: {
+          username: chance.word({ length: 20 }),
+          password: chance.word({ length: 20 }),
+        },
+      },
+      mediaCleaner: {
+        active: false,
+        scheduleSchema: "*/20 * * * *",
       },
     },
     startDate: chance.date(),

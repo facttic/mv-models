@@ -3,6 +3,7 @@ const { HashtagSchema } = require("../hashtag/schema");
 
 const ManifestationSchema = mongoose.Schema(
   {
+    active: { type: Boolean, default: true },
     name: { type: String, trim: true, required: true },
     uri: { type: String, trim: true, required: true },
     title: { type: String, trim: true, default: "" },
@@ -87,6 +88,33 @@ const ManifestationSchema = mongoose.Schema(
         facebook: {
           src: { type: String, trim: true, default: "" },
         },
+      },
+    },
+    config: {
+      twitter: {
+        active: { type: Boolean, default: false },
+        scheduleSchema: { type: String, default: "*/20 * * * *" },
+        maxTweets: { type: Number, default: 1400 },
+        maxTweetsPerQuery: { type: Number, default: 100 },
+        api: {
+          consumerKey: { type: String },
+          consumerSecret: { type: String },
+          accessTokenKey: { type: String },
+          accessTokenSecret: { type: String },
+        },
+      },
+      instagram: {
+        active: { type: Boolean, default: false },
+        scheduleSchema: { type: String, default: "*/20 * * * *" },
+        maxPosts: { type: Number, default: 1400 },
+        impersonate: {
+          username: { type: String },
+          password: { type: String },
+        },
+      },
+      mediaCleaner: {
+        active: { type: Boolean, default: false },
+        scheduleSchema: { type: String, default: "*/20 * * * *" },
       },
     },
     startDate: { type: Date, default: Date.now },
