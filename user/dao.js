@@ -10,6 +10,17 @@ UserSchema.statics.createNew = async function createNew(user) {
   return await UserDAO.create(user);
 };
 
+UserSchema.statics.udpateToMany = async function udpateToMany(ids, user) {
+  return await UserDAO.updateMany(
+    { _id: { $in: ids } },
+    { $set: user },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+};
+
 UserSchema.statics.udpate = async function udpate(_id, user) {
   return await UserDAO.findByIdAndUpdate(_id, user, {
     new: true,
@@ -19,6 +30,10 @@ UserSchema.statics.udpate = async function udpate(_id, user) {
 
 UserSchema.statics.getById = async function getById(_id) {
   return await UserDAO.findById(_id).exec();
+};
+
+UserSchema.statics.getManyByIds = async function getManyByIds(ids) {
+  return UserDAO.find({ _id: { $in: ids } }).exec();
 };
 
 UserSchema.statics.removeById = async function removeById(_id, userId = null) {
