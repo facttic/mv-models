@@ -37,18 +37,13 @@ UserSchema.statics.findByEmail = async (email) => {
 
 UserSchema.statics.findByCredentials = async (email, password) => {
   // Search for a user by email and compare password.
-  const user = await UserDAO.findByEmail(email);
-
-  if (!user) {
-    throw new Error("Invalid login credentials");
+  let user = await UserDAO.findByEmail(email);
+  if (user) {
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
+      user = null;
+    }
   }
-
-  const isPasswordMatch = await bcrypt.compare(password, user.password);
-
-  if (!isPasswordMatch) {
-    throw new Error("Invalid login credentials");
-  }
-
   return user;
 };
 
@@ -79,7 +74,7 @@ UserSchema.pre("save", async function (next) {
 
 UserSchema.methods.generateAuthToken = async function () {
   // Generate an auth token for the user
-  const token = jwt.sign({ _id: this._id }, process.env.API_JWT_KEY || "defaultkey");
+  const token = jwt.sign({ _id: this._id }, process.env.API_JWT_KEY || "API_JWT_KEY");
   this.tokens && this.tokens.push({ token });
   await this.save();
   return token;
