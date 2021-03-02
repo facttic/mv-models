@@ -10,15 +10,8 @@ UserSchema.statics.createNew = async function createNew(user) {
   return await UserDAO.create(user);
 };
 
-UserSchema.statics.udpateToMany = async function udpateToMany(ids, user) {
-  return await UserDAO.updateMany(
-    { _id: { $in: ids } },
-    { $set: user },
-    {
-      new: true,
-      runValidators: true,
-    },
-  );
+UserSchema.statics.udpateToMany = async function udpateToMany(ids, query) {
+  return await UserDAO.updateMany({ _id: { $in: ids } }, { $set: query });
 };
 
 UserSchema.statics.udpate = async function udpate(_id, user) {
