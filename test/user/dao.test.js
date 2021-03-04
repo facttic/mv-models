@@ -90,17 +90,15 @@ describe("user", () => {
     it("will throw if the email doesnt exist", async () => {
       await factory.create("user", { password: "holahola" });
 
-      await expect(UserDAO.findByCredentials("imnothere@here.net", "holahola")).to.be.rejectedWith(
-        "Invalid login credentials",
-      );
+      const response = await UserDAO.findByCredentials("imnothere@here.net", "holahola");
+      await expect(response).to.be.null;
     });
 
     it("will throw if password doesnt match", async () => {
       const user = await factory.create("user", { password: "holahola" });
 
-      await expect(UserDAO.findByCredentials(user.email, "holachau")).to.be.rejectedWith(
-        "Invalid login credentials",
-      );
+      const response = await UserDAO.findByCredentials(user.email, "holachau");
+      await expect(response).to.be.null;
     });
   });
 

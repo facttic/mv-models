@@ -76,7 +76,7 @@ PostSchema.statics.removeById = async function removeById(_id, userId = null) {
   return null;
 };
 
-PostSchema.statics.removeByManifestationId = async function removeByManifestationId(
+PostSchema.statics.removeByIdByManifestationId = async function removeByIdByManifestationId(
   manifestationId,
   _id,
   userId = null,

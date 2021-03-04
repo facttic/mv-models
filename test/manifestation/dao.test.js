@@ -40,6 +40,19 @@ describe("manifestation", () => {
         .which.has.lengthOf(manifestations.length);
     });
 
+    it("will return every document with projected structure", async () => {
+      await factory.createMany("manifestation", 5);
+      const fetchedManifestations = await ManifestationDAO.getAll({
+        selectQuery: "name",
+      });
+      fetchedManifestations.list.forEach((manifestation) =>
+        expect(manifestation.toJSON()).to.have.deep.property("name"),
+      );
+      fetchedManifestations.list.forEach((manifestation) =>
+        expect(manifestation.toJSON()).to.not.have.deep.property("uri"),
+      );
+    });
+
     it("will return an empty list if there are no documents", async () => {
       await expect(ManifestationDAO.getAll({}))
         .to.eventually.be.an("object")
