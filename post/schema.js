@@ -25,8 +25,8 @@ const PostSchema = mongoose.Schema(
     },
     user: {
       id_str: { type: String, trim: true, required: true, index: true },
-      name: { type: String, trim: true, required: true },
-      screen_name: { type: String, trim: true, required: true },
+      name: { type: String, trim: true },
+      screen_name: { type: String, trim: true },
       location: { type: String, trim: true },
       profile_image_url: { type: String, trim: true },
       profile_image_url_https: { type: String, trim: true },
