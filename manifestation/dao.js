@@ -42,6 +42,21 @@ ManifestationSchema.statics.getAll = async function getAll({
   };
 };
 
+ManifestationSchema.statics.getByQuery = async function getByQuery({
+  skip,
+  limit,
+  sort,
+  selectQuery,
+  query,
+}) {
+  return await ManifestationDAO.find({ ...query })
+    .skip(skip)
+    .limit(limit)
+    .sort(sort)
+    .select(selectQuery)
+    .exec();
+};
+
 ManifestationSchema.statics.getById = async function getById(_id) {
   return await ManifestationDAO.findById(_id).exec();
 };
