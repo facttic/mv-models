@@ -64,7 +64,7 @@ const ManifestationSchema = mongoose.Schema(
       thumbnails: {
         // TODO: habría un map entre cantidad de columnas y tamaños
         // 7: columnas 500px x 500px
-        columns: { type: Number, enum: [7, 8, 9, 10] },
+        columns: { type: Number, enum: [7, 8, 9, 10], default: 7 },
         colors: {
           hover: { type: String, trim: true, default: "" },
           border: { type: String, trim: true, default: "" },
