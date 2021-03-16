@@ -89,6 +89,9 @@ const ManifestationSchema = mongoose.Schema(
           src: { type: String, trim: true, default: "" },
         },
       },
+      background: {
+        src: { type: String, trim: true, default: "" },
+      },
     },
     config: {
       twitter: {
