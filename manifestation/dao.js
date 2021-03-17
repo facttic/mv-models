@@ -4,12 +4,22 @@ const mongooseDelete = require("mongoose-delete");
 
 const { ManifestationSchema } = require("./schema");
 const { PostDAO } = require("../post/dao");
-
+const Emmiter = require("events").EventEmitter;
+const ManifestationEmmiter = new Emmiter();
 const _ = require("lodash");
+
+ManifestationSchema.post("findOneAndUpdate", async function (manifestation) {
+  ManifestationEmmiter.emit("update", manifestation);
+});
 
 // Static Methods
 ManifestationSchema.statics.createNew = async function createNew(manifestation) {
   return await ManifestationDAO.create(manifestation);
+};
+
+ManifestationSchema.statics.registerEvent = async function registerEvent(eventName, fn) {
+  console.log("REGISTERED!");
+  ManifestationEmmiter.on(eventName, fn);
 };
 
 // TODO: googlear y revisar como mergear las propiedades del objeto existente
@@ -162,4 +172,4 @@ ManifestationSchema.set("toJSON", {
 
 const ManifestationDAO = mongoose.model("Manifestation", ManifestationSchema);
 
-module.exports = { ManifestationDAO };
+module.exports = { ManifestationDAO, ManifestationEmmiter };
