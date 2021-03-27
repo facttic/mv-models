@@ -21,6 +21,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.11",
     "mongoose-delete": "^0.5.3",
+    "redis": "^3.0.2",
     "validator": "^13.5.2"
   },
   "devDependencies": {
