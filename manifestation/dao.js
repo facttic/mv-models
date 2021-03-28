@@ -9,11 +9,7 @@ const redis = require("redis");
 const publisher = redis.createClient();
 
 ManifestationSchema.post("findOneAndUpdate", async function (manifestation) {
-  publisher.publish("man-updates", JSON.stringify(manifestation));
-});
-
-publisher.on("message", function (channel, message) {
-  console.log("Message: " + message + " on channel: " + channel + " is arrive!");
+  publisher.publish("maninfestation-updates", manifestation.id.toString());
 });
 
 // Static Methods
