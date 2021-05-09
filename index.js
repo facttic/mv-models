@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const { DenyListDAO } = require("./deny_list/dao");
 const { PostDAO } = require("./post/dao");
-const { ManifestationDAO, ManifestationEmmiter } = require("./manifestation/dao");
+const { ManifestationDAO } = require("./manifestation/dao");
 const { UserDAO } = require("./user/dao");
 const factories = require("./factories");
 
@@ -40,7 +40,6 @@ module.exports = {
   PostDAO,
   UserDAO,
   ManifestationDAO,
-  ManifestationEmmiter,
   init,
   close,
   clear,
