@@ -17,7 +17,6 @@ ManifestationSchema.statics.createNew = async function createNew(manifestation) 
   return await ManifestationDAO.create(manifestation);
 };
 
-// TODO: googlear y revisar como mergear las propiedades del objeto existente
 ManifestationSchema.statics.udpate = async function udpate(_id, manifestation) {
   return await ManifestationDAO.findByIdAndUpdate(_id, manifestation, {
     new: true,
@@ -45,6 +44,11 @@ ManifestationSchema.statics.getAll = async function getAll({
     list: manifestations,
     total: manifestationsTotal,
   };
+};
+
+ManifestationSchema.statics.getByUriParts = async function getByUriParts(parts) {
+  const uris = parts.split(",");
+  return await ManifestationDAO.findOne({ uri: { $in: uris } }).exec();
 };
 
 ManifestationSchema.statics.getByQuery = async function getByQuery({
