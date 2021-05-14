@@ -6,6 +6,7 @@ const { ManifestationSchema } = require("./schema");
 const { PostDAO } = require("../post/dao");
 const _ = require("lodash");
 const redis = require("redis");
+const config = require("config");
 
 const port = config.get("redis.port") | 6379;
 const host = config.get("redis.host") | "redis";
