@@ -5,14 +5,17 @@ const mongooseDelete = require("mongoose-delete");
 const { ManifestationSchema } = require("./schema");
 const { PostDAO } = require("../post/dao");
 const _ = require("lodash");
+
+console.log("Requiring modules...");
 const redis = require("redis");
 const config = require("config");
 
 const port = config.get("redis.port") | 6379;
 const host = config.get("redis.host") | "redis";
-let publiser;
+let publisher;
 
 try {
+  console.log("Creating Redis client...");
   publisher = redis.createClient(port, host);
 } catch(err) {
   console.error("Error connecting to Redis ", port, host);
