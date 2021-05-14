@@ -13,7 +13,11 @@ const port = config.get("redis.port") || 6379;
 const host = config.get("redis.host") || "redis";
 
 console.log(`Creating Redis client to ${host}:${port}`);
-let publisher = redis.createClient(port, host);
+const publisher = redis.createClient(port, host);
+
+publisher.on("error", function(error) {
+  console.error(error);
+});
 
 ManifestationSchema.post("findOneAndUpdate", async function (manifestation) {
   publisher.publish("maninfestation-updates", manifestation.id.toString());
