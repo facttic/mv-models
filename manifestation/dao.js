@@ -6,21 +6,14 @@ const { ManifestationSchema } = require("./schema");
 const { PostDAO } = require("../post/dao");
 const _ = require("lodash");
 
-console.log("Requiring modules...");
 const redis = require("redis");
 const config = require("config");
 
-const port = config.get("redis.port") | 6379;
-const host = config.get("redis.host") | "redis";
-let publisher;
+const port = config.get("redis.port") || 6379;
+const host = config.get("redis.host") || "redis";
 
-try {
-  console.log(`Creating Redis client to ${host}:${port}`);
-  publisher = redis.createClient(port, host);
-} catch(err) {
-  console.error("Error connecting to Redis ", port, host);
-  console.error(Err);
-}
+console.log(`Creating Redis client to ${host}:${port}`);
+let publisher = redis.createClient(port, host);
 
 ManifestationSchema.post("findOneAndUpdate", async function (manifestation) {
   publisher.publish("maninfestation-updates", manifestation.id.toString());
