@@ -10,7 +10,14 @@ const config = require("config");
 
 const port = config.get("redis.port") | 6379;
 const host = config.get("redis.host") | "redis";
-const publisher = redis.createClient(port, host);
+let publiser;
+
+try {
+  publisher = redis.createClient(port, host);
+} catch(err) {
+  console.error("Error connecting to Redis ", port, host);
+  console.error(Err);
+}
 
 ManifestationSchema.post("findOneAndUpdate", async function (manifestation) {
   publisher.publish("maninfestation-updates", manifestation.id.toString());
