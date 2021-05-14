@@ -15,7 +15,7 @@ const host = config.get("redis.host") | "redis";
 let publisher;
 
 try {
-  console.log("Creating Redis client...");
+  console.log(`Creating Redis client to ${host}:${port}`);
   publisher = redis.createClient(port, host);
 } catch(err) {
   console.error("Error connecting to Redis ", port, host);
