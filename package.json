@@ -17,6 +17,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "config": "^3.3.6",
     "factory-girl": "^5.0.4",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.11",

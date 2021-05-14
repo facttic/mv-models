@@ -6,7 +6,10 @@ const { ManifestationSchema } = require("./schema");
 const { PostDAO } = require("../post/dao");
 const _ = require("lodash");
 const redis = require("redis");
-const publisher = redis.createClient();
+
+const port = config.get("redis.port") | 6379;
+const host = config.get("redis.host") | "redis";
+const publisher = redis.createClient(port, host);
 
 ManifestationSchema.post("findOneAndUpdate", async function (manifestation) {
   publisher.publish("maninfestation-updates", manifestation.id.toString());
