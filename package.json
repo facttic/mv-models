@@ -1,6 +1,6 @@
 {
   "name": "mv-models",
-  "version": "4.0.7",
+  "version": "4.0.8",
   "description": "Models and DB access for Marchas Virtuales",
   "main": "index.js",
   "repository": {
