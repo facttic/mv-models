@@ -7,7 +7,7 @@ const { UserDAO } = require("./user/dao");
 const factories = require("./factories");
 
 async function init(dbUri) {
-  console.log(`Connecting... ${dbUri}`);
+  console.log(`Connecting...`);
   await mongoose.connect(dbUri, {
     useNewUrlParser: true,
     useCreateIndex: true,
